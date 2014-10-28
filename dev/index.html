@@ -54,10 +54,34 @@
              M61.484,79.623c2.879-1.027,5.647-2.394,8.254-4.092c-2.421,2.609-5.203,4.851-8.254,6.655
             C61.362,81.517,61.29,80.605,61.484,79.623z M55.407,36.382l1.171,8.659c0.229,1.707-0.978,3.292-2.685,3.524l-8.661,1.171
             c-1.706,0.229-3.292-0.979-3.523-2.686l-1.17-8.658c-0.229-1.708,0.977-3.292,2.685-3.524l8.659-1.17
-            C53.593,33.466,55.177,34.674,55.407,36.382z"/></p>
+            C53.593,33.466,55.177,34.674,55.407,36.382z"/></svg></p>
             <h1>Syrup</h1>
           </div>
-        </svg>
+          <h2>Syrup is a collection of shared UI utilities and libraries leveraged by AI2 when developing interfaces.</h2>
+          <h2>It is opinionated, simple and based upon LESS and AngularJS</h2>
+          <h3>Installation:</h3>
+          <code><pre>npm install syrup</pre></code>
+          <h3>Usage:</h3>
+          <h4>Gulp</h4>
+          <code><pre>
+var gulp = require('gulp');
+var syrup = require('syrup');
+syrup.gulp.tasks(
+  gulp,
+  {
+    html: 'src/**/*.html',
+    less: 'src/styles.less',
+    js: 'src/main.js',
+    assets: 'src/assets/**/*',
+    build: 'build'
+  },
+  'dev',
+);</pre></code>
+          <h4>LESS</h4>
+          <code><pre>
+@import '../node_modules/syrup/less/syrup.less'</pre></code>
+          <h4>HTML</h4>
+          <p>Take a look at the example components below!</p>
       </div>
     </header>
     <section class="no-top-margin">

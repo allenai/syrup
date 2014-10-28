@@ -30,7 +30,7 @@ syrup.gulp.tasks(
     js: 'src/main.js',
     assets: 'src/assets/**/*',
     build: 'build'
-  }
+  },
   'dev',
 );
 ```
