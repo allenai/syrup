@@ -1,0 +1,381 @@
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+  color: @dark-gray;
+}
+
+/**
+ * Max content width
+ */
+section,
+.max-width-content {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: @max-content-width;
+}
+
+footer,
+section,
+.max-width-content,
+.padded {
+  padding: @spacing;
+}
+
+section {
+  section:last-child {
+    padding-bottom: 0;
+  }
+}
+
+/**
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+::-moz-selection {
+  background: @light-blue;
+  text-shadow: none;
+}
+
+::selection {
+  background: @light-blue;
+  text-shadow: none;
+}
+
+/**
+ * A better looking default horizontal rule
+ */
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid @light-gray;
+  margin: @spacing 0;
+  padding: 0;
+}
+
+/**
+ * Remove the gap between images, videos, audio and canvas and the bottom of
+ * their containers: h5bp.com/i/440
+ */
+audio,
+canvas,
+img,
+video {
+  vertical-align: middle;
+}
+
+/**
+ * Remove default fieldset styles.
+ */
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Allow only vertical resizing of textareas.
+ */
+textarea {
+  resize: vertical;
+}
+
+/**
+ * Default styling for code tags
+ */
+code {
+  color: @yellow;
+  display: block;
+  padding: @spacing-sm;
+  background: @gray;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+a[href] {
+  color: @blue;
+  text-decoration: none;
+  transition: color 150ms linear;
+
+  &:hover {
+    color: @light-blue;
+  }
+
+  &:active {
+    color: @dark-blue;
+  }
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+header {
+  background: @dark-blue;
+
+  &,
+  * {
+    color: @white;
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+footer {
+  border-top: 1px solid @light-gray;
+  color: @light-gray;
+  font-weight: 300;
+}
+
+
+/* ==========================================================================
+   Messages
+   ========================================================================== */
+
+.msg {
+  padding: @spacing @spacing @spacing @spacing + (2 * @spacing-sm);
+  position: relative;
+
+  &:before {
+    background-size: contain;
+    content: '';
+    height: @spacing;
+    left: @spacing-sm;
+    position: absolute;
+    top: @spacing-sm;
+    width: @spacing;
+  }
+}
+
+.msg-success,
+.msg-error {
+  color: @white;
+}
+
+.msg-success {
+  background: @green;
+
+  &:before {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjAiIGlkPSJMYXllcl8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI1Ljc3MnB4IiBoZWlnaHQ9IjI1LjU5OHB4IiB2aWV3Qm94PSIwIDAgMjUuNzcyIDI1LjU5OCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjUuNzcyIDI1LjU5ODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMjUuNjQ2LDEzLjY1M2wtMS41MTktMi4zOTZsMC45MDEtMi42ODljMC4xMjItMC4zNjctMC4wMy0wLjc3LTAuMzY1LTAuOTYybC0yLjQ1OC0xLjQxN2wtMC40NTItMi44ICBjLTAuMDYzLTAuMzgyLTAuMzg1LTAuNjY3LTAuNzcxLTAuNjgzbC0yLjgzNS0wLjExMWwtMS43MDEtMi4yN2MtMC4yMzItMC4zMS0wLjY1Mi0wLjQxMy0wLjk5OS0wLjI0NmwtMi41NjEsMS4yMThsLTIuNTYyLTEuMjE5ICBDOS45NzYtMC4wODcsOS41NTgsMC4wMTYsOS4zMjUsMC4zMjVsLTEuNzAxLDIuMjdMNC43ODksMi43MDZjLTAuMzg1LDAuMDE1LTAuNzA4LDAuMy0wLjc3LDAuNjgybC0wLjQ1MiwyLjhMMS4xMDksNy42MDUgIEMwLjc3NCw3Ljc5NywwLjYyMSw4LjIsMC43NDMsOC41NjdsMC45MDEsMi42ODlsLTEuNTE4LDIuMzk3Yy0wLjIwNywwLjMyNy0wLjE1NCwwLjc1NCwwLjEyNSwxLjAyMmwyLjA0NywxLjk2M2wtMC4yMywyLjgyNiAgYy0wLjAzMSwwLjM4NywwLjIxMywwLjc0LDAuNTg0LDAuODQ4bDIuNzI1LDAuNzg1bDEuMTA5LDIuNjExYzAuMTUyLDAuMzU1LDAuNTMzLDAuNTYxLDAuOTExLDAuNDc5bDIuNzgtMC41N2wyLjE5NCwxLjc5NyAgYzAuMTQ5LDAuMTIxLDAuMzMyLDAuMTg0LDAuNTE1LDAuMTg0YzAuMTgzLDAsMC4zNjUtMC4wNjMsMC41MTUtMC4xODRsMi4xOTQtMS43OTdsMi43OCwwLjU3YzAuMzc3LDAuMDgsMC43Ni0wLjEyMywwLjkxMS0wLjQ3OSAgbDEuMTA5LTIuNjExbDIuNzI1LTAuNzg1YzAuMzcxLTAuMTA3LDAuNjE1LTAuNDYxLDAuNTg0LTAuODQ4bC0wLjIzLTIuODI2bDIuMDQ3LTEuOTYzQzI1LjgsMTQuNDA3LDI1Ljg1MywxMy45OCwyNS42NDYsMTMuNjUzeiAgIE0xOC43NjMsOS43NDJsLTUuNjkxLDguNTI2Yy0wLjIxNSwwLjMxOC0wLjU0OCwwLjUzMS0wLjg3OSwwLjUzMWMtMC4zMywwLTAuNjk5LTAuMTg1LTAuOTM0LTAuNDIxbC00LjE3OC00LjI0NSAgYy0wLjI4NS0wLjI5LTAuMjg1LTAuNzYsMC0xLjA1bDEuMDMxLTEuMDVjMC4yODUtMC4yODYsMC43NDgtMC4yODYsMS4wMzEsMGwyLjcxOSwyLjc2Mmw0LjQ4NC02LjcxOCAgYzAuMjI1LTAuMzM5LDAuNjgyLTAuNDI1LDEuMDE0LTAuMTk2bDEuMjA5LDAuODMxQzE4LjkwMiw4Ljk0MiwxOC45ODgsOS40MDUsMTguNzYzLDkuNzQyTDE4Ljc2Myw5Ljc0MnoiLz4KPC9zdmc+);
+  }
+}
+
+.msg-warning {
+  background: lighten(@yellow, 10%);
+
+  &:before {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJhbGVydCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIxMDBweCIgaGVpZ2h0PSIxMDBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDEwMCAxMDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsPSIjMDAwIiBkPSJNNTAsMUMyMi45MzgsMSwxLDIyLjkzOCwxLDUwYzAsMjcuMDYyLDIxLjkzOCw0OSw0OSw0OWMyNy4wNjIsMCw0OS0yMS45MzgsNDktNDlDOTksMjIuOTM4LDc3LjA2MiwxLDUwLDF6ICAgTTUwLDgzLjcwOWMtNC4xNjQsMC03LjU0LTMuMzc2LTcuNTQtNy41NHMzLjM3Ni03LjU0LDcuNTQtNy41NGM0LjE2NCwwLDcuNTQsMy4zNzYsNy41NCw3LjU0UzU0LjE2NCw4My43MDksNTAsODMuNzA5eiAgIE01Ny41NCw1NS4yOTdjMCw0LjE2NC0zLjM3Niw3LjU0MS03LjU0LDcuNTQxYy00LjE2NCwwLTcuNTQtMy4zNzctNy41NC03LjU0MVYyMy44MzFjMC00LjE2NCwzLjM3Ni03LjU0LDcuNTQtNy41NCAgYzQuMTY0LDAsNy41NCwzLjM3Niw3LjU0LDcuNTRWNTUuMjk3eiIvPgo8L3N2Zz4=);
+  }
+}
+
+.msg-error {
+  background: @red;
+
+  &:before {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJhbGVydCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIxMDBweCIgaGVpZ2h0PSIxMDBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDEwMCAxMDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsPSIjZmZmIiBkPSJNNTAsMUMyMi45MzgsMSwxLDIyLjkzOCwxLDUwYzAsMjcuMDYyLDIxLjkzOCw0OSw0OSw0OWMyNy4wNjIsMCw0OS0yMS45MzgsNDktNDlDOTksMjIuOTM4LDc3LjA2MiwxLDUwLDF6ICAgTTUwLDgzLjcwOWMtNC4xNjQsMC03LjU0LTMuMzc2LTcuNTQtNy41NHMzLjM3Ni03LjU0LDcuNTQtNy41NGM0LjE2NCwwLDcuNTQsMy4zNzYsNy41NCw3LjU0UzU0LjE2NCw4My43MDksNTAsODMuNzA5eiAgIE01Ny41NCw1NS4yOTdjMCw0LjE2NC0zLjM3Niw3LjU0MS03LjU0LDcuNTQxYy00LjE2NCwwLTcuNTQtMy4zNzctNy41NC03LjU0MVYyMy44MzFjMC00LjE2NCwzLjM3Ni03LjU0LDcuNTQtNy41NCAgYzQuMTY0LDAsNy41NCwzLjM3Niw3LjU0LDcuNTRWNTUuMjk3eiIvPgo8L3N2Zz4=);
+  }
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="submit"],
+textarea,
+button,
+a[href].btn,
+.btn {
+  padding: @spacing-xsm;
+}
+
+input[type="text"],
+input[type="search"],
+input[type="password"],
+textarea {
+  border: 1px solid @light-gray;
+  box-shadow: inset 1px 1px 4px 0 @light-gray;
+  width: 100%;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin: @spacing-xsm;
+  position: relative;
+  top: -2px;
+}
+
+input[type="submit"],
+button,
+a[href].btn,
+.btn {
+  background: @blue;
+  border: none;
+  border-radius: @spacing-xsm / 4;
+  color: @white;
+  display: inline-block;
+  min-width: 1.5 * @spacing-xxl;
+  text-align: center;
+  transition: background 150ms linear;
+
+  &:hover {
+    background: @light-blue;
+  }
+
+  &:active {
+    background: @dark-blue;
+  }
+}
+
+a[href].btn-red,
+.btn-red {
+  background: @red;
+
+  &:hover {
+    background: @light-red;
+  }
+
+  &:active {
+    background: @dark-red;
+  }
+}
+
+a[href].btn-green,
+.btn-green {
+  background: @green;
+
+  &:hover {
+    background: @light-green;
+  }
+
+  &:active {
+    background: @dark-green;
+  }
+}
+
+a[href].btn-transparent,
+.btn-transparent {
+  background: transparent;
+  color: @blue;
+
+  &:hover {
+    background: @light-gray;
+  }
+
+  &:active {
+    background: @gray;
+    color: #fff;
+  }
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/**
+ * Margin / padding related
+ */
+
+.no-top-margin {
+  margin-top: 0;
+}
+
+.no-bottom-margin {
+  margin-bottom: 0;
+}
+
+/**
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+
+/**
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/**
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+
+/**
+ * Hide visually and from screenreaders, but maintain layout
+ */
+.invisible {
+  visibility: hidden;
+}
+
+/**
+ * Floats
+ */
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+/**
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.clearfix:before,
+.clearfix:after {
+  content: " "; /* 1 */
+  display: table; /* 2 */
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+  *zoom: 1;
+}
