@@ -2,6 +2,13 @@
 
 Syrup is a collection of shared UI utilities and libraries leveraged by [AI2](http://github.com/allenai) when developing interfaces.
 
+## Installation
+
+Install via `npm`:
+
+```
+npm install syrup
+```
 
 ## Gulp Tasks
 
@@ -42,3 +49,9 @@ syrup.gulp.tasks(
     * `syrup/less/dimensions.less`: Variables related to standard site dimensions.
     * `syrup/less/reset.less`: Browser style normalization.
     * `syrup/less/defaults.less`: Opinionated defaults.
+
+Example:
+
+```css
+@import '../../node_modules/syrup/less/syrup.less';
+```
