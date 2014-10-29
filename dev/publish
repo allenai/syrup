@@ -1,0 +1,59 @@
+#!/usr/local/bin/node
+/**
+ * Publishes the simple demo HTML to the specified location as a static website.
+ */
+var less = require('less');
+var fs = require('fs');
+var path = require('path');
+
+var dir = path.resolve(process.argv[2] || process.cwd());
+
+if(!dir || !fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) {
+  console.log("\nusage:\n\tpublish [DIRECTORY]\n");
+  process.exit(1);
+}
+
+var lessDir = path.resolve(__dirname, '..', 'less');
+
+fs.readFile(path.resolve(lessDir, 'syrup.less'), function(err, data) {
+  if(err) {
+    console.error(err);
+    process.exit(2);
+  } else {
+    less.render(data.toString(), { compress: true, paths: [ lessDir ] }, function(err, css) {
+      if(err) {
+        console.error(err);
+        process.exit(3);
+      } else {
+        fs.writeFile(path.resolve(dir, 'syrup.css'), css, function(err) {
+          if(err) {
+            console.error(err);
+          }
+        });
+      }
+    });
+  }
+});
+
+fs.readFile(path.resolve(__dirname, '..', 'dev', 'index.html'), function(err, data) {
+  if(err) {
+    console.error(err);
+    process.exit(4);
+  } else {
+    data = data.toString()
+      .replace(
+        '<link rel="stylesheet/less" href="/less/syrup.less" />',
+        '<link rel="stylesheet" href="syrup.css" />')
+      .replace(
+        '<script src="/lessjs/less-1.7.5.js" type="text/javascript"></script>',
+        ''
+      );
+    fs.writeFile(path.resolve(dir, 'index.html'), data, function(err) {
+      if(err) {
+        console.err(err);
+        process.exit(5);
+      }
+    })
+  }
+});
+
