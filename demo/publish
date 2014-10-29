@@ -35,7 +35,7 @@ fs.readFile(path.resolve(lessDir, 'syrup.less'), function(err, data) {
   }
 });
 
-fs.readFile(path.resolve(__dirname, '..', 'dev', 'index.html'), function(err, data) {
+fs.readFile(path.resolve(__dirname, '..', 'demo', 'index.html'), function(err, data) {
   if(err) {
     console.error(err);
     process.exit(4);
