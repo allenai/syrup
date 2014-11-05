@@ -182,7 +182,7 @@ module.exports = {
      * Task for starting a griddle + express based HTTP server.
      */
     gulp.task('start-server', function(done) {
-      server.start({ dir: build, port: port }).then(
+      server.start({ base: path.base, serve: path.build, }).then(
         function(message) {
           gutil.log(message);
           done();
