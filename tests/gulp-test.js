@@ -8,9 +8,7 @@ var syrup = require('../');
 describe('syrup.gulp.tasks()', function() {
   var SAMPLE = path.resolve(__dirname, '../fixtures/project');
 
-  var tasks = function() {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);
-  };
+  syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);
 
   it('throws an exception without gulp', function() {
     assert.throws(syrup.gulp.tasks.bind(syrup.gulp.tasks), 'Invalid gulp instance');
@@ -22,7 +20,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('moves html', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('html', function() {
       assert(fs.existsSync(path.resolve(SAMPLE, 'build', 'foo.html')));
       done();
@@ -30,7 +27,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('breaks the cache', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('html', function() {
       assert(fs.readFileSync(path.resolve(SAMPLE, 'build', 'foo.html'))
             .toString()
@@ -40,7 +36,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('compiles less', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('less', function() {
       assert(fs.existsSync(path.resolve(SAMPLE, 'build', 'foo.css')));
       assert.equal(
@@ -52,7 +47,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('combines js', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('js', function() {
       assert(fs.existsSync(path.resolve(SAMPLE, 'build', 'foo.js')));
       assert.equal(
@@ -64,7 +58,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('copies js', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('js', function() {
       assert(fs.existsSync(path.resolve(SAMPLE, 'build', 'foo.js')));
       assert.equal(
@@ -76,7 +69,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('copies assets', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('assets', function() {
       assert(fs.existsSync(path.resolve(SAMPLE, 'build', 'assets', 'foo.txt')));
       assert.equal(
@@ -88,7 +80,6 @@ describe('syrup.gulp.tasks()', function() {
   });
 
   it('cleans up', function(done) {
-    syrup.gulp.tasks(gulp, require(SAMPLE + '/paths.js'), 'prod', true);;
     gulp.start('assets', 'js', 'less', 'html', function() {
       assert(fs.readdirSync(path.resolve(SAMPLE, 'build')).length !== 0);
       gulp.start('clean', function() {
@@ -96,6 +87,21 @@ describe('syrup.gulp.tasks()', function() {
         done();
       });
     });
+  });
+
+  it('lints javascript', function(done) {
+    // Capture the output
+    var captured = [];
+    var orig = console.log;
+    console.log = function() {
+      captured.push(Array.prototype.slice.apply(arguments));
+    };
+    gulp.start('jslint', function() {
+      // Revert the capture
+      console.log = orig;
+      assert(captured.join('').indexOf('2 warnings') !== -1);
+      done();
+    })
   });
 
 });

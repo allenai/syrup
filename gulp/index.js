@@ -9,6 +9,8 @@ var less = require('gulp-less');
 var del = require('del');
 var gutil = require('gulp-util');
 var gif = require('gulp-if');
+var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
 var util = require('util');
 var path = require('path');
 
@@ -50,17 +52,6 @@ module.exports = {
       return del(paths.build + '/**/*', cb);
     });
 
-    /**
-     * Copies all html files to the build directory.
-     */
-    gulp.task('html', [ 'clean', 'js', 'less', 'assets' ], function() {
-      gutil.log(util.format('Copying %s to %s',
-          gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.html)
-          .pipe(cb())
-          .pipe(gulp.dest(paths.build));
-    });
-
 
     /**
      * Compiles LESS files.
@@ -75,6 +66,16 @@ module.exports = {
         .pipe(less({ compress: env !== 'dev' }))
         .pipe(autoprefixer('last 2 versions'))
         .pipe(gulp.dest(paths.build));
+    });
+
+    /**
+     * Lints Javascript
+     */
+    gulp.task('jslint', function() {
+      gutil.log(util.format('Linting %s', gutil.colors.magenta(paths.js)));
+      return gulp.src(paths.js)
+        .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
+        .pipe(jshint.reporter(stylish));
     });
 
     /**
@@ -99,6 +100,17 @@ module.exports = {
       gutil.log(util.format('Copying %s to %s',
           gutil.colors.magenta(paths.assets), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.assets, { base: paths.src })
+          .pipe(gulp.dest(paths.build));
+    });
+
+    /**
+     * Copies all html files to the build directory.
+     */
+    gulp.task('html', [ 'clean', 'js', 'less', 'assets' ], function() {
+      gutil.log(util.format('Copying %s to %s',
+          gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
+      return gulp.src(paths.html)
+          .pipe(cb())
           .pipe(gulp.dest(paths.build));
     });
   }
