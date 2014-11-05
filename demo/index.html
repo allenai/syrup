@@ -70,11 +70,16 @@ var syrup = require('syrup');
 syrup.gulp.tasks(
   gulp,
   {
+    base: __dirname,
     html: 'src/**/*.html',
     less: 'src/styles.less',
     js: 'src/main.js',
     assets: 'src/assets/**/*',
-    build: 'build'
+    build: 'build',
+    unitTests: 'src/**/*-test.js',
+    unitTestBundle: 'tmp/unit-test-bundle.js',
+    unitTestConfig: 'karma.conf.js'
+    integrationTestConfig: 'protractor.conf.js',
   },
   'dev',
 );</pre></code>

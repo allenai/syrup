@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = {
-  gulp: require('./gulp')
+  gulp: require('./gulp'),
+  server: require('./server')
 };

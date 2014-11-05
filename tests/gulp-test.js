@@ -83,7 +83,7 @@ describe('syrup.gulp.tasks()', function() {
     gulp.start('assets', 'js', 'less', 'html', function() {
       assert(fs.readdirSync(path.resolve(SAMPLE, 'build')).length !== 0);
       gulp.start('clean', function() {
-        assert(fs.readdirSync(path.resolve(SAMPLE, 'build')).length === 0);
+        assert(!fs.existsSync(path.resolve(SAMPLE, 'build')));
         done();
       });
     });
