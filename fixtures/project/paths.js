@@ -1,9 +1,7 @@
-var src = __dirname + '/src/';
 module.exports = {
-  src: src,
   build: __dirname + '/build',
-  js: src + 'foo.js',
-  assets: src + 'assets/**/*',
-  less: src + 'foo.less',
-  html: src + 'foo.html'
+  js: __dirname + '/src/foo.js',
+  assets: __dirname + '/src/assets/**/*',
+  less: __dirname + '/src/foo.less',
+  html: __dirname + '/src/foo.html'
 };

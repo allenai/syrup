@@ -1,6 +1,5 @@
 'use strict';
 
-var plumber = require('gulp-plumber');
 var cb = require('gulp-cache-breaker');
 var autoprefixer = require('gulp-autoprefixer');
 var browserify = require('gulp-browserify');
@@ -25,7 +24,7 @@ module.exports = {
    * @param {string}  paths.less        Path to the project's LESS files.
    * @param {string}  paths.assets      Path to th eproject's assets.
    * @param {string}  paths.build       Path to the project's build directory where the final output should be placed.
-   * @param {string}  env               An enviroment flag. Can be 'dev' or 'prod'.
+   * @param {string}  env               An enviroment flag. Valid values are 'dev' and 'prod'.
    * @param {boolean} [silent=false]    If true no log messages are output.
    *
    * @returns {undefined}
@@ -60,9 +59,6 @@ module.exports = {
       gutil.log(util.format('Compiling %s to %s',
           gutil.colors.magenta(paths.less), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.less)
-        .pipe(plumber(function(err) {
-          gutil.log(gutil.colors.red(err.toString()));
-        }))
         .pipe(less({ compress: env !== 'dev' }))
         .pipe(autoprefixer('last 2 versions'))
         .pipe(gulp.dest(paths.build));
@@ -85,9 +81,6 @@ module.exports = {
       gutil.log(util.format('Compiling %s to %s',
           gutil.colors.magenta(paths.js), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.js)
-        .pipe(plumber(function(err) {
-          gutil.log(gutil.colors.red(err.toString()));
-        }))
         .pipe(browserify())
         .pipe(gif(env !== 'dev', uglify()))
         .pipe(gulp.dest(paths.build));
@@ -97,9 +90,15 @@ module.exports = {
      * Copies static assets.
      */
     gulp.task('assets', [ 'clean' ], function() {
+      // Remove any * characters from the pattern and derive the directory name as
+      // this will preserve the root path to the assets themselves which is likely
+      // ideal.
+      // TODO: Another option would be to configure this via an optional path (path.assetBase ore
+      // something akin to that).  This way the user could toggle this behavior
+      var base = path.dirname(path.resolve(paths.assets.replace(/\*/g, '')));
       gutil.log(util.format('Copying %s to %s',
           gutil.colors.magenta(paths.assets), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.assets, { base: paths.src })
+      return gulp.src(paths.assets, { base: base })
           .pipe(gulp.dest(paths.build));
     });
 
