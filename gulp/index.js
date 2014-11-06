@@ -14,6 +14,7 @@ var pesto = require('pesto');
 var stylish = require('jshint-stylish');
 var util = require('util');
 var path = require('path');
+var stringify = require('stringify');
 var server = require('../server');
 
 module.exports = {
@@ -101,8 +102,8 @@ module.exports = {
     gulp.task('js', [ 'clean' ], function() {
       gutil.log(util.format('Compiling %s to %s',
           gutil.colors.magenta(paths.js), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.js)
-        .pipe(browserify())
+      return gulp.src(paths.js, { read: false })
+        .pipe(browserify({ transform: stringify({ extensions: ['.html'], minify: true }) }))
         .pipe(gif(env !== 'dev', uglify()))
         .pipe(gulp.dest(paths.build));
     });

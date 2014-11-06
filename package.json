@@ -1,7 +1,7 @@
 {
   "name": "syrup",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "repository": "allenai/syrup",
   "author": {
     "name": "Sam Skjonsberg",
@@ -40,6 +40,7 @@
     "karma-jasmine": "0.2.3",
     "minimist": "1.1.0",
     "pesto": "0.0.7",
-    "q": "1.0.1"
+    "q": "1.0.1",
+    "stringify": "3.0.0"
   }
 }
