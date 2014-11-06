@@ -11,7 +11,6 @@ var gif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var karma = require('karma');
 var pesto = require('pesto');
-var concat = require('gulp-concat');
 var stylish = require('jshint-stylish');
 var util = require('util');
 var path = require('path');
@@ -31,8 +30,13 @@ module.exports = {
    * @param {string}  paths.assets                  Path to the project's assets.
    * @param {string}  paths.build                   Path to the project's build directory where the
    *                                                final output should be placed.
-   * @param {string}  paths.unitTests               Path to the project's unit tests.
-   * @param {string}  paths.unitTestBundle          Path to the project's unit test bundle file.
+   * @param {string}  paths.tmp                     Path where temporary files (like browserified)
+   *                                                unit tests should be put.
+   * @param {string}  paths.watch                   Path to the files which should be watched for changes
+   *                                                while the griddle serve is running and trigger
+   *                                                a rebuild as changes occur.
+   * @param {string}  paths.unitTests               Path to the project's unit tests.  These files are
+   *                                                browserified to paths.tmp prior to execution
    * @param {string}  paths.unitTestConfig          Path to the project's karma configuration file.
    * @param {string}  paths.integrationTestConfig   Path to the project's pesto / protractor
    *                                                configuration file.
@@ -63,12 +67,11 @@ module.exports = {
       gutil.log(util.format('Removing artifacts from %s',
           gutil.colors.magenta(paths.build)));
       var targets = [ paths.build ];
-      if(paths.unitTestBundle) {
-        targets.push(paths.unitTestBundle);
+      if(paths.tmp) {
+        targets.push(paths.tmp);
       }
       return del(targets, cb);
     });
-
 
     /**
      * Compiles LESS files.
@@ -134,21 +137,19 @@ module.exports = {
     /**
      * Combines all unit tests into a single file for testing.
      */
-    gulp.task('bundle-unit-tests', function() {
-      var filename = path.basename(paths.unitTestBundle);
-      var dir = path.dirname(paths.unitTestBundle);
+    gulp.task('browserify-unit-tests', function() {
       return gulp.src(paths.unitTests, { read: false })
         .pipe(browserify())
-        .pipe(concat(filename))
-        .pipe(gulp.dest(dir));
+        .pipe(gulp.dest(paths.tmp));
     });
 
     /**
      * Run project unit tests using Karma.
      */
-    gulp.task('run-unit-tests', ['bundle-unit-tests'], function(done) {
+    gulp.task('run-unit-tests', ['browserify-unit-tests'], function(done) {
       karma.server.start({
-        configFile: paths.unitTestConfig,
+        // Karma needs an absolute path to the configuration file so attempt to resolve
+        configFile: path.resolve(process.cwd(), paths.base, paths.unitTestConfig),
         singleRun: true
       }, done);
     });
@@ -158,7 +159,7 @@ module.exports = {
      */
     gulp.task('run-integration-tests', function(done) {
       // We don't need to build since griddle does it for us.
-      server.start({ base: path.base, serve: path.build, watch: false }).then(
+      server.start({ base: paths.base, serve: paths.build }).then(
         function() {
           pesto(paths.integrationTestConfig).then(function(passed) {
             server.stop().then(function() {
@@ -182,9 +183,13 @@ module.exports = {
      * Task for starting a griddle + express based HTTP server.
      */
     gulp.task('start-server', function(done) {
-      server.start({ base: path.base, serve: path.build, }).then(
-        function(message) {
-          gutil.log(message);
+      var opts = { base: paths.base, serve: paths.build };
+      if(paths.watch) {
+        opts.watch = paths.watch;
+      }
+      server.start(opts).then(
+        function(event) {
+          gutil.log('Server listening: ' + gutil.colors.magenta(event.data));
           done();
         },
         function(e) {

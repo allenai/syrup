@@ -12,14 +12,13 @@ var watch = options.watch;
 var port = options.port || 4000;
 
 var app = express();
-app.use(griddle(base, watch ? base : undefined));
+app.use(griddle(base, watch));
 app.use(express.static(serve));
 
 app.listen(port, function() {
-  var msg = 'Server listening on http://localhost:' + port;
   if(process && process.send) {
-    process.send(msg);
+    process.send({ event: 'SERVER_STARTED', data: 'http://localhost:' + port });
   } else {
-    console.log(msg);
+    console.log('Server listening on http://localhost:' + port);
   }
 });

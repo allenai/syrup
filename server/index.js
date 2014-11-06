@@ -13,12 +13,12 @@ module.exports = {
    * located in options.base.   If options.watch is set to true, the project is rebuilt everytime
    * changes within options.base are detected.
    *
-   * @param {object}  options              Server options.
-   * @param {object}  options.base         The base path to the project (where the gulpfile lives).
-   * @param {boolean} options.watch        Optional boolean toggling whether the server should
-   *                                       rebuild as changes are detected within the base path.
-   * @param {string}  options.serve        The directory from which to serve static files.
-   * @param {number}  [options.port=4000]  The port to listen on, defaults to 4000.
+   * @param {object}  options                   Server options.
+   * @param {object}  options.base              The base path to the project (where the gulpfile lives).
+   * @param {string}  options.serve             The directory from which to serve static files.
+   * @param {string}  [options.watch=undefined] Directory to watch for changes and trigger rebuilds
+   *                                            as they occur.
+   * @param {number}  [options.port=4000]       The port to listen on, defaults to 4000.
    *
    * @returns {Promise} A promise which is resolved once the server is started.
    */
@@ -28,7 +28,7 @@ module.exports = {
       var args = [];
       for(var option in options) {
         if(options.hasOwnProperty(option)) {
-          args.push('-' + option + '=' + options[option]);
+          args.push('--' + option + '=' + options[option]);
         }
       }
       server = child_process.fork(path.resolve(__dirname, 'server'), args);

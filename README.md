@@ -21,15 +21,20 @@ npm install syrup
  * @param {object}  gulp                          The gulp library.
  * @param {object}  paths                         An object defining a series of paths required
  *                                                for the various tasks.
-
+ * @param {string}  paths.base                    The base path to the project.
  * @param {string}  paths.html                    Path to the project's HTML files.
  * @param {string}  paths.js                      Path to the project's JS files.
  * @param {string}  paths.less                    Path to the project's LESS files.
  * @param {string}  paths.assets                  Path to the project's assets.
  * @param {string}  paths.build                   Path to the project's build directory where the
  *                                                final output should be placed.
- * @param {string}  paths.unitTests               Path to the project's unit tests.
- * @param {string}  paths.unitTestBundle          Path to the project's unit test bundle file.
+ * @param {string}  paths.tmp                     Path where temporary files (like browserified)
+ *                                                unit tests should be put.
+ * @param {string}  paths.watch                   Path to the files which should be watched for changes
+ *                                                while the griddle serve is running and trigger
+ *                                                a rebuild as changes occur.
+ * @param {string}  paths.unitTests               Path to the project's unit tests.  These files are
+ *                                                browserified to paths.tmp prior to execution
  * @param {string}  paths.unitTestConfig          Path to the project's karma configuration file.
  * @param {string}  paths.integrationTestConfig   Path to the project's pesto / protractor
  *                                                configuration file.
@@ -56,12 +61,12 @@ See [Pesto](https://github.com/allenai/pesto) for more on writing, configuring a
  * located in options.base.   If options.watch is set to true, the project is rebuilt everytime
  * changes within options.base are detected.
  *
- * @param {object}  options              Server options.
- * @param {object}  options.base         The base path to the project (where the gulpfile lives).
- * @param {boolean} options.watch        Optional boolean toggling whether the server should
- *                                       rebuild as changes are detected within the base path.
- * @param {string}  options.serve        The directory from which to serve static files.
- * @param {number}  [options.port=4000]  The port to listen on, defaults to 4000.
+ * @param {object}  options                   Server options.
+ * @param {object}  options.base              The base path to the project (where the gulpfile lives).
+ * @param {string}  options.serve             The directory from which to serve static files.
+ * @param {string}  [options.watch=undefined] Directory to watch for changes and trigger rebuilds
+ *                                            as they occur.
+ * @param {number}  [options.port=4000]       The port to listen on, defaults to 4000.
  *
  * @returns {Promise} A promise which is resolved once the server is started.
  */
@@ -98,10 +103,11 @@ syrup.gulp.tasks(
     js: 'src/main.js',
     assets: 'src/assets/**/*',
     build: 'build',
+    tmp: 'tmp',
+    watch: 'src/',
     unitTests: 'src/**/*-test.js',
-    unitTestBundle: 'tmp/unit-test-bundle.js',
-    unitTestConfig: 'karma.conf.js'
-    integrationTestConfig: 'protractor.conf.js',
+    unitTestConfig: 'karma.conf.js',
+    integrationTestConfig: 'protractor.conf.js'
   },
   'dev',
 );
