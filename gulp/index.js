@@ -70,7 +70,7 @@ module.exports = {
       if(paths.tmp) {
         targets.push(paths.tmp);
       }
-      return del(targets, cb);
+      return del(targets, { force: true }, cb);
     });
 
     /**
