@@ -1,0 +1,25 @@
+/* ==========================================================================
+   Utility functions
+   ========================================================================== */
+
+/**
+ * Styles for a colored button with active and hover states
+ * which toggle colors in a consistent fashion.
+ *
+ * @param {string} @color       The background color of the button.
+ * @param {string} @font-color: The font color of the button.
+ */
+.colored-button(@bg, @font-color:#fff) {
+  background: @bg;
+  border-bottom-color: darken(@bg, 20%);
+  color: @font-color;
+  text-shadow: 1.25px 1.25px 0 darken(@bg, 20%);
+
+  &:hover {
+    background: lighten(@bg, 10%);
+  }
+
+  &:active {
+    background: darken(@bg, 10%);
+  }
+}

@@ -11,29 +11,6 @@ textarea {
 }
 
 /**
- * Max content width
- */
-section,
-.max-width-content {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: @max-content-width;
-}
-
-footer,
-section,
-.max-width-content,
-.padded {
-  padding: @spacing;
-}
-
-section {
-  section:last-child {
-    padding-bottom: 0;
-  }
-}
-
-/**
  * Remove text-shadow in selection highlight: h5bp.com/i
  * These selection rule sets have to be separate.
  * Customize the background color to match your design.
@@ -56,7 +33,7 @@ hr {
   height: 1px;
   border: 0;
   border-top: 1px solid @light-gray;
-  margin: @spacing 0;
+  margin: @spacing-l 0;
   padding: 0;
 }
 
@@ -97,6 +74,51 @@ code {
   background: @gray;
 }
 
+
+/* ==========================================================================
+   Spacing
+   ========================================================================== */
+
+section,
+.max-width-content {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: @max-content-width;
+}
+
+section,
+code,
+p,
+pre,
+.spaced {
+  margin: @spacing 0;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+code pre {
+  margin: 0;
+}
+
+footer,
+section,
+.max-width-content,
+.padded {
+  padding: @spacing-l;
+}
+
+section {
+  section:last-child {
+    padding-bottom: 0;
+  }
+}
+
 /* ==========================================================================
    Links
    ========================================================================== */
@@ -108,6 +130,7 @@ a[href] {
 
   &:hover {
     color: @light-blue;
+    text-decoration: underline;
   }
 
   &:active {
@@ -120,7 +143,12 @@ a[href] {
    ========================================================================== */
 
 header {
-  background: @dark-blue;
+  background: linear-gradient(to top, @dark-blue, @blue);
+  box-shadow: 2px 2px 4px 0 @light-gray;
+
+  .max-width-content:not(.padded) {
+    padding: @spacing-xsm;
+  }
 
   &,
   h1,
@@ -131,6 +159,12 @@ header {
   h6 {
     color: @white;
   }
+}
+
+.header-title-text {
+  font-size: @font-size-xsm;
+  margin: 0 @spacing-xsm 0;
+  text-transform: uppercase;
 }
 
 /* ==========================================================================
@@ -200,10 +234,7 @@ input[type="text"],
 input[type="search"],
 input[type="password"],
 input[type="submit"],
-textarea,
-button,
-a[href].btn,
-.btn {
+textarea {
   padding: @spacing-xsm;
 }
 
@@ -227,54 +258,47 @@ input[type="submit"],
 button,
 a[href].btn,
 .btn {
-  background: @blue;
   border: none;
-  border-radius: @spacing-xsm / 4;
+  border-radius: @spacing-sm / 6;
+  border-bottom: 1px solid transparent;
   color: @white;
+  padding: @spacing-xxsm @spacing;
   display: inline-block;
-  min-width: 1.5 * @spacing-xxl;
   text-align: center;
   transition: background 150ms linear;
+  .colored-button(@blue);
 
   &:hover {
-    background: @light-blue;
+    text-decoration: none;
   }
+}
 
-  &:active {
-    background: @dark-blue;
-  }
+a[href].btn-sm,
+.btn-sm {
+  border-radius: @spacing-sm / 8;
+  font-weight: normal;
+  min-width: 0;
+  font-size: @font-size-xsm;
+  padding: @spacing-xxsm;
+  text-transform: uppercase;
 }
 
 a[href].btn-red,
 .btn-red {
-  background: @red;
-
-  &:hover {
-    background: @light-red;
-  }
-
-  &:active {
-    background: @dark-red;
-  }
+  .colored-button(@red);
 }
 
 a[href].btn-green,
 .btn-green {
-  background: @green;
-
-  &:hover {
-    background: @light-green;
-  }
-
-  &:active {
-    background: @dark-green;
-  }
+  .colored-button(@green);
 }
 
 a[href].btn-transparent,
 .btn-transparent {
   background: transparent;
   color: @blue;
+  border-bottom: none;
+  text-shadow: none;
 
   &:hover {
     background: @light-gray;
@@ -283,6 +307,40 @@ a[href].btn-transparent,
   &:active {
     background: @gray;
     color: #fff;
+  }
+}
+
+a[href].btn-dark-blue,
+.btn-dark-blue {
+  .colored-button(@dark-blue);
+}
+
+a[href].btn-gray,
+.btn-gray {
+  .colored-button(@gray);
+}
+
+a[href].btn-yellow,
+.btn-yellow {
+  .colored-button(@yellow, @dark-gray);
+}
+
+a[href].btn-orange,
+.btn-orange {
+  .colored-button(@orange);
+}
+
+a[href].btn-light-gray,
+.btn-light-gray {
+  .colored-button(@light-gray, @dark-gray);
+  text-shadow: none;
+
+  &:hover {
+    background: lighten(@light-gray, 5%);
+  }
+
+  &:active {
+    background: darken(@light-gray, 10%);
   }
 }
 
@@ -383,4 +441,43 @@ a[href].btn-transparent,
  */
 .clearfix {
   *zoom: 1;
+}
+
+/**
+ * Flex box related utility classes.
+ */
+.flex-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.flex-fixed-item-size {
+  > * {
+    flow-grow: 0;
+    flex-shrink: 0;
+  }
+}
+
+/**
+ * Use margin: auto for aligining an item contrary to it's parent's align-items setting.
+ * The align-self property seems desireable here but works less consistently across browsers, so for
+ * now we'll use this instead.
+ */
+.flex-align-right {
+  margin-left: auto;
+}
+
+.flex-align-left {
+  margin-right: auto;
+}
+
+.flex-align-top {
+  margin-bottom: auto;
+}
+
+.flex-align-bottom {
+  margin-top: auto;
 }
