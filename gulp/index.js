@@ -131,7 +131,7 @@ module.exports = {
       gutil.log(util.format('Copying %s to %s',
           gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.html)
-          .pipe(cb())
+          .pipe(cb(paths.build))
           .pipe(gulp.dest(paths.build));
     });
 
