@@ -3,6 +3,7 @@
 var express = require('express');
 var griddle = require('griddle');
 var fs = require('fs');
+var path = require('path');
 
 var options = require('minimist')(process.argv.slice(2)) || {};
 
