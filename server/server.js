@@ -18,7 +18,7 @@ app.use(express.static(serve));
 // If a static file doesn't exist, resolve to index.
 // TODO(codeviking): Add an option for disabling / enabling this.
 // TODO(codeviking): How to throw 404s as is appropriate?
-app.use(function(req) {
+app.use(function(req, res) {
   res.end(fs.readFileSync(path.resolve(serve, 'index.html')).toString());
 });
 
