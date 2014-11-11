@@ -80,13 +80,6 @@ code {
    ========================================================================== */
 
 section,
-.max-width-content {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: @max-content-width;
-}
-
-section,
 code,
 p,
 pre,
@@ -117,6 +110,13 @@ section {
   section:last-child {
     padding-bottom: 0;
   }
+}
+
+section,
+.max-width-content {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: @max-content-width;
 }
 
 /* ==========================================================================
@@ -268,7 +268,7 @@ a[href].btn,
   border-radius: @spacing-sm / 6;
   border-bottom: 1px solid transparent;
   color: @white;
-  padding: @spacing-xxsm @spacing;
+  padding: @spacing-xsm @spacing;
   display: inline-block;
   text-align: center;
   transition: background 150ms linear;
