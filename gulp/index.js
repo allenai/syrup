@@ -26,7 +26,12 @@ module.exports = {
    *                                                for the various tasks.
    * @param {string}  paths.base                    The base path to the project.
    * @param {string}  paths.html                    Path to the project's HTML files.
-   * @param {string}  paths.js                      Path to the project's JS files.
+   * @param {string}  paths.js                      Path to ALL of the project's JS files which will
+   *                                                be linted.
+   * @param {string}  paths.jsMain                  Path to the project's JS entry-point.  This entry
+   *                                                point is used for the purpose of concatenating
+   *                                                all javascript files into a single script
+   *                                                for inclusion.
    * @param {string}  paths.less                    Path to the project's LESS files.
    * @param {string}  paths.assets                  Path to the project's assets.
    * @param {string}  paths.build                   Path to the project's build directory where the
@@ -101,8 +106,8 @@ module.exports = {
      */
     gulp.task('js', [ 'clean' ], function() {
       gutil.log(util.format('Compiling %s to %s',
-          gutil.colors.magenta(paths.js), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.js, { read: false })
+          gutil.colors.magenta(paths.jsMain), gutil.colors.magenta(paths.build)));
+      return gulp.src(paths.jsMain, { read: false })
         .pipe(browserify({ transform: stringify({ extensions: ['.html'], minify: true }) }))
         .pipe(gif(env !== 'dev', uglify()))
         .pipe(gulp.dest(paths.build));
