@@ -5,8 +5,9 @@
 var less = require('less');
 var fs = require('fs');
 var path = require('path');
-
+var ncp = require('ncp');
 var dir = path.resolve(process.argv[2] || process.cwd());
+var Promise = require('promise');
 
 if(!dir || !fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) {
   console.log("\nusage:\n\tpublish [DIRECTORY]\n");
@@ -15,45 +16,72 @@ if(!dir || !fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) {
 
 var lessDir = path.resolve(__dirname, '..', 'less');
 
-fs.readFile(path.resolve(lessDir, 'syrup.less'), function(err, data) {
-  if(err) {
-    console.error(err);
-    process.exit(2);
-  } else {
-    less.render(data.toString(), { compress: true, paths: [ lessDir ] }, function(err, css) {
-      if(err) {
-        console.error(err);
-        process.exit(3);
-      } else {
-        fs.writeFile(path.resolve(dir, 'syrup.css'), css, function(err) {
-          if(err) {
-            console.error(err);
-          }
-        });
-      }
-    });
-  }
+var lessPromise = new Promise(function(resolve, reject) {
+  fs.readFile(path.resolve(lessDir, 'syrup.less'), function(err, data) {
+    if(err) {
+      reject(err);
+    } else {
+      less.render(data.toString(), { compress: true, paths: [ lessDir ] }, function(err, css) {
+        if(err) {
+          reject(err);
+        } else {
+          fs.writeFile(path.resolve(dir, 'syrup.css'), css, function(err) {
+            if(err) {
+              reject(err)
+            } else {
+              resolve();
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
-fs.readFile(path.resolve(__dirname, '..', 'demo', 'index.html'), function(err, data) {
-  if(err) {
-    console.error(err);
-    process.exit(4);
-  } else {
-    data = data.toString()
-      .replace(
-        '<link rel="stylesheet/less" href="/less/syrup.less" />',
-        '<link rel="stylesheet" href="syrup.css" />')
-      .replace(
-        '<script src="/lessjs/less-1.7.5.js" type="text/javascript"></script>',
-        ''
-      );
-    fs.writeFile(path.resolve(dir, 'index.html'), data, function(err) {
-      if(err) {
-        console.err(err);
-        process.exit(5);
-      }
+var indexPromise = new Promise(function(resolve, reject) {
+  fs.readFile(path.resolve(__dirname, 'index.html'), function(err, data) {
+    if(err) {
+      reject(err);
+    } else {
+      data = data.toString()
+        .replace(
+          '<link rel="stylesheet/less" href="/less/syrup.less" />',
+          '<link rel="stylesheet" href="syrup.css" />')
+        .replace(
+          '<script src="/lessjs/less-1.7.5.js" type="text/javascript"></script>',
+          ''
+        );
+      fs.writeFile(path.resolve(dir, 'index.html'), data, function(err) {
+        if(err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      })
+    }
+  });
+});
+
+var assetsPromise = new Promise(function(resolve, reject) {
+  ncp(path.resolve(__dirname, '..', 'assets'), path.resolve(dir, 'assets'), function(err) {
+    if(err) {
+      reject(err);
+    } else {
+      resolve();
+    }
+  });
+});
+
+Promise.all(lessPromise, indexPromise, assetsPromise).then(
+  function(res) {
+    console.log('Success!');
+  },
+  function(errors) {
+    errors.forEach(function(e) {
+      console.log(e);
     })
   }
-});
+);
+
+
 
