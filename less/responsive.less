@@ -1,0 +1,46 @@
+
+/* ==========================================================================
+   (Responsive) Max-width content
+   ========================================================================== */
+
+.max-width-content {
+  margin: 0 auto;
+  padding: @spacing;
+  width: 100%;
+}
+
+/**
+ * Mobile and Tablet
+ */
+@media only screen and (max-width: 767px) {
+  .max-width-content {
+    width: 100%;
+  }
+}
+
+/**
+ * Tablet
+ */
+@media only screen and (min-width: 768px) and (max-width: 980px) {
+  .max-width-content {
+    max-width: 768px;
+  }
+}
+
+/**
+ * Standard
+ */
+@media only screen and (min-width: 980px) and (max-width: 1200px) {
+  .max-width-content {
+    max-width: 980px;
+  }
+}
+
+/**
+ * Large Screens
+ */
+@media only screen and (min-width: 1200px) {
+  .max-width-content {
+    max-width: 1200px;
+  }
+}

@@ -7,7 +7,7 @@ button,
 input,
 select,
 textarea {
-  color: @dark-gray;
+  color: @off-black;
 }
 
 /**
@@ -68,10 +68,12 @@ textarea {
  * Default styling for code tags
  */
 code {
-  color: @light-yellow;
+  background: @lighter-gray;
+  border: 1px solid @light-gray;
+  border-radius: 4px;
+  color: @blue;
   display: block;
   padding: @spacing-sm;
-  background: @gray;
 }
 
 
@@ -79,37 +81,23 @@ code {
    Spacing
    ========================================================================== */
 
-section,
 code,
 p,
 pre,
 .spaced {
   margin: @spacing 0;
+}
 
-  &:first-child {
-    margin-top: 0;
-  }
+section {
+  margin: @spacing-l 0;
+}
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+section:first-child {
+  margin: 0;
 }
 
 code pre {
   margin: 0;
-}
-
-footer,
-section,
-.max-width-content,
-.padded {
-  padding: @spacing-l;
-}
-
-section {
-  section:last-child {
-    padding-bottom: 0;
-  }
 }
 
 section,
@@ -149,12 +137,8 @@ a[href],
    ========================================================================== */
 
 header {
-  background: linear-gradient(to top, @dark-blue, @blue);
-  box-shadow: 2px 2px 4px 0 @light-gray;
-
-  .max-width-content:not(.padded) {
-    padding: @spacing-xsm;
-  }
+  background: @dark-blue;
+  border-top: 2px solid @yellow;
 
   &,
   h1,
@@ -174,13 +158,33 @@ header {
 }
 
 /* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  background: @black;
+  color: @white;
+  padding: @spacing 0;
+
+  [class*="icon-"] {
+    color: @yellow;
+    font-size: @font-size * 7.5;
+  }
+}
+
+/* ==========================================================================
    Footer
    ========================================================================== */
 
 footer {
-  border-top: 1px solid @light-gray;
-  color: @light-gray;
+  border-top: 1px solid @lighter-gray;
+  color: darken(@light-gray, 8%);
   font-weight: 300;
+
+  a[href] {
+    color: darken(@light-gray, 8%);
+    text-decoration: underline;
+  }
 }
 
 
@@ -196,9 +200,9 @@ footer {
     background-size: contain;
     content: '';
     height: @spacing;
-    left: @spacing-sm;
+    left: @spacing;
     position: absolute;
-    top: @spacing-sm;
+    top: @spacing;
     width: @spacing;
   }
 }
@@ -265,14 +269,16 @@ button,
 a[href].btn,
 .btn {
   border: none;
-  border-radius: @spacing-sm / 6;
+  border-radius: @spacing / 5;
   border-bottom: 1px solid transparent;
   color: @white;
-  padding: @spacing-xsm @spacing;
   display: inline-block;
+  font-size: @font-size-sm;
+  font-weight: 600;
+  line-height: 1;
+  padding: @spacing-xsm @spacing;
   text-align: center;
   transition: background 150ms linear;
-  line-height: 1;
   .colored-button(@blue);
 
   &:hover {
@@ -282,12 +288,10 @@ a[href].btn,
 
 a[href].btn-sm,
 .btn-sm {
-  border-radius: @spacing-sm / 8;
-  font-weight: normal;
-  min-width: 0;
+  border-radius: @spacing / 5;
   font-size: @font-size-xsm;
-  padding: @spacing-xxsm;
-  text-transform: uppercase;
+  min-width: 0;
+  padding: @spacing / 3 @spacing * .6;
 }
 
 a[href].btn-red,
@@ -329,7 +333,7 @@ a[href].btn-gray,
 
 a[href].btn-yellow,
 .btn-yellow {
-  .colored-button(@yellow, @dark-gray);
+  .colored-button(@yellow, @off-black);
 }
 
 a[href].btn-orange,
@@ -339,7 +343,7 @@ a[href].btn-orange,
 
 a[href].btn-light-gray,
 .btn-light-gray {
-  .colored-button(@light-gray, @dark-gray);
+  .colored-button(@light-gray, @off-black);
   text-shadow: none;
 
   &:hover {

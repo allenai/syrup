@@ -2,18 +2,19 @@
    Default settings related to textual content.
    ========================================================================== */
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700);
+@import url(http://fonts.googleapis.com/css?family=Oxygen:400italic,400,300,700);
 
 /**
  * Set font-size variables
  */
-@font-size: 1.25rem;
-@font-size-xsm: @font-size * 0.6;
-@font-size-sm: @font-size * 0.85;
-@font-size-m: @font-size * 1.2;
-@font-size-l: @font-size * 1.5;
-@font-size-xl: @font-size * 2;
-@font-size-xxl: @font-size * 4;
+@font-size: 1rem; // 16px
+@font-size-xxsm: @font-size * 0.6875; // 11px
+@font-size-xsm: @font-size * 0.75; // 12px
+@font-size-sm: @font-size * 0.875; // 14px
+@font-size-m: @font-size * 1.125; // 18px
+@font-size-l: @font-size * 1.25; // 20px
+@font-size-xl: @font-size * 1.5; // 24px
+@font-size-xxl: @font-size * 2; // 32px
 
 /**
  * Address `font-family` inconsistency between `textarea` and other form
@@ -24,11 +25,11 @@ button,
 input,
 select,
 textarea {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Oxygen', sans-serif;
 }
 
 body {
-  color: @dark-gray;
+  color: @off-black;
   font-size: @font-size;
   line-height: 1.4;
 }
@@ -44,40 +45,36 @@ h3,
 h4,
 h5,
 h6 {
-  color: @gray;
-  margin: @spacing-l 0;
-
-  &:first-child {
-    margin-top: 0;
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+  margin: @spacing 0;
 }
 
 h1 {
-  font-size: @font-size-xl;
+  font-size: @font-size-xxl;
 }
 
 h2 {
-  font-size: @font-size-l;
+  font-size: @font-size-xl;
 }
 
 h3 {
-  font-size: @font-size-m;
+  font-size: @font-size-l;
 }
 
 h4 {
-  font-size: @font-size;
+  font-size: @font-size-m;
 }
 
 h5 {
-  font-size: @font-size-sm;
+  font-size: @font-size;
 }
 
 h6 {
-  font-size: @font-size-xsm;
+  font-size: @font-size-sm;
+}
+
+.page-header {
+  border-bottom: 1px solid @light-gray;
+  padding-bottom: @spacing-xxsm;
 }
 
 /**
