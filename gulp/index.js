@@ -34,7 +34,7 @@ module.exports = {
    *                                                for inclusion.
    * @param {string}  paths.less                    Path to the project's LESS files.
    * @param {string}  paths.assets                  Path to the project's assets.
-   * @param {string}  paths.fonts                  Path to the project's fonts.
+   * @param {string}  paths.fonts                   Path to the project's fonts.
    * @param {string}  paths.build                   Path to the project's build directory where the
    *                                                final output should be placed.
    * @param {string}  paths.tmp                     Path where temporary files (like browserified)
