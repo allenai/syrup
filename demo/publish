@@ -25,7 +25,7 @@ var lessPromise = new Promise(function(resolve, reject) {
         if(err) {
           reject(err);
         } else {
-          css = css.replace(/\/assets/ig, 'assets');
+          css = css.replace(/\/fonts/ig, 'fonts');
           fs.writeFile(path.resolve(dir, 'syrup.css'), css, function(err) {
             if(err) {
               reject(err)
