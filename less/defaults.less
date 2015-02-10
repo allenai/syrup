@@ -245,6 +245,7 @@ input[type="search"],
 input[type="password"],
 input[type="submit"],
 textarea {
+  font-size: @font-size-sm;
   padding: @spacing-xsm;
 }
 
@@ -273,16 +274,21 @@ a[href].btn,
   border-bottom: 1px solid transparent;
   color: @white;
   display: inline-block;
-  font-size: @font-size-sm;
-  font-weight: 600;
+  font-size: @font-size-xsm;
+  font-weight: 700;
   line-height: 1;
   padding: @spacing-xsm @spacing;
   text-align: center;
+  text-transform: capitalize;
   transition: background 150ms linear;
   .colored-button(@blue);
 
   &:hover {
     text-decoration: none;
+  }
+  
+  &[disabled] {
+    opacity: 0.4;
   }
 }
 
@@ -353,6 +359,13 @@ a[href].btn-light-gray,
   &:active {
     background: darken(@light-gray, 10%);
   }
+}
+
+label {
+  font-size: @font-size-xsm;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: @gray;
 }
 
 /* ==========================================================================
@@ -470,6 +483,11 @@ a[href].btn-light-gray,
     flow-grow: 0;
     flex-shrink: 0;
   }
+}
+
+.flex-vcenter {
+  display: flex;
+  align-items: center;
 }
 
 /**
