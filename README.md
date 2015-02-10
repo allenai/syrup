@@ -26,6 +26,7 @@ npm install syrup
  * @param {string}  paths.js                      Path to the project's JS files.
  * @param {string}  paths.less                    Path to the project's LESS files.
  * @param {string}  paths.assets                  Path to the project's assets.
+ * @param {string}  paths.fonts                   Path to the project's fonts.
  * @param {string}  paths.build                   Path to the project's build directory where the
  *                                                final output should be placed.
  * @param {string}  paths.tmp                     Path where temporary files (like browserified)
@@ -102,6 +103,7 @@ syrup.gulp.tasks(
     less: 'src/styles.less',
     js: 'src/main.js',
     assets: 'src/assets/**/*',
+    fonts: 'node_modules/syrup/fonts/**/*',
     build: 'build',
     tmp: 'tmp',
     watch: 'src/',
@@ -117,9 +119,13 @@ syrup.gulp.tasks(
 
   * `syrup/less/syrup.less`: A collection of less styles which include:
     * `syrup/less/colors.less`: Common colors.
-    * `syrup/less/dimensions.less`: Variables related to standard site dimensions.
-    * `syrup/less/reset.less`: Browser style normalization.
     * `syrup/less/defaults.less`: Opinionated defaults.
+    * `syrup/less/dimensions.less`: Variables related to standard site dimensions.
+    * `syrup/less/functions.less`: Utility functions.
+    * `syrup/less/icons.less`: Webfont icons.
+    * `syrup/less/reset.less`: Browser style normalization.
+    * `syrup/less/responsive.less`: Basic responsiveness for specified containers.
+    * `syrup/less/text.less`: Typographic styles.
 
 Example:
 
