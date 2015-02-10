@@ -34,6 +34,7 @@ module.exports = {
    *                                                for inclusion.
    * @param {string}  paths.less                    Path to the project's LESS files.
    * @param {string}  paths.assets                  Path to the project's assets.
+   * @param {string}  paths.fonts                  Path to the project's fonts.
    * @param {string}  paths.build                   Path to the project's build directory where the
    *                                                final output should be placed.
    * @param {string}  paths.tmp                     Path where temporary files (like browserified)
@@ -130,9 +131,20 @@ module.exports = {
     });
 
     /**
+     * Copies static fonts.
+     */
+    gulp.task('fonts', [ 'clean' ], function() {
+      var base = path.dirname(path.resolve(paths.fonts.replace(/\*/g, '')));
+      gutil.log(util.format('Copying %s to %s',
+          gutil.colors.magenta(paths.fonts), gutil.colors.magenta(paths.build)));
+      return gulp.src(paths.fonts, { base: base })
+          .pipe(gulp.dest(paths.build));
+    });
+
+    /**
      * Copies all html files to the build directory.
      */
-    gulp.task('html', [ 'clean', 'js', 'less', 'assets' ], function() {
+    gulp.task('html', [ 'clean', 'js', 'less', 'assets', 'fonts' ], function() {
       gutil.log(util.format('Copying %s to %s',
           gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.html)

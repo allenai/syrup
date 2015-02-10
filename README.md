@@ -102,6 +102,7 @@ syrup.gulp.tasks(
     less: 'src/styles.less',
     js: 'src/main.js',
     assets: 'src/assets/**/*',
+    fonts: 'node_modules/syrup/fonts/**/*',
     build: 'build',
     tmp: 'tmp',
     watch: 'src/',

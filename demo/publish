@@ -63,7 +63,7 @@ var indexPromise = new Promise(function(resolve, reject) {
 });
 
 var assetsPromise = new Promise(function(resolve, reject) {
-  ncp(path.resolve(__dirname, '..', 'assets'), path.resolve(dir, 'assets'), function(err) {
+  ncp(path.resolve(__dirname, '..', 'fonts'), path.resolve(dir, 'fonts'), function(err) {
     if(err) {
       reject(err);
     } else {

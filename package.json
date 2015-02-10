@@ -1,7 +1,7 @@
 {
   "name": "syrup",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "repository": "allenai/syrup",
   "author": {
     "name": "Sam Skjonsberg",
