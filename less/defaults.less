@@ -354,7 +354,7 @@ a[href].btn-orange,
 
 a[href].btn-light-gray,
 .btn-light-gray {
-  .colored-button(@light-gray, @off-black);
+  .colored-button(@light-gray);
   text-shadow: none;
 
   &:hover {
@@ -363,6 +363,26 @@ a[href].btn-light-gray,
 
   &:active {
     background: darken(@light-gray, 10%);
+  }
+}
+
+.btn-light-gray {
+  color: @dark-blue;
+
+  &:hover {
+    color: @blue;
+  }
+}
+
+.btn-light-gray-red {
+  background: @light-gray;
+  border-bottom: 1px solid @dark-shadow;
+  color: @red;
+  text-shadow: 0 0 0 transparent;
+
+  &:hover {
+    background: @red;
+    color: @white;
   }
 }
 
