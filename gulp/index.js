@@ -21,13 +21,17 @@ var path = require('path');
 var Buffer = require('buffer').Buffer;
 var replace = require('gulp-replace');
 var stringify = require('stringify');
-var server = require('../server');
 var merge = require('../merge');
 var defaultPaths = require('./default-paths');
 
 /**
  * @private
  * Returns the top most directory in the specified path, removing any glob style wildcards (*).
+ *
+ * @param {string} p The full path
+ *
+ * @returns {string} The top most directory found.  For instance, returns "asdf" if given
+ *                   "/foo/bar/asdf".
  */
 var topDirectory = function(p) {
   return p.split(path.sep).filter(function(part) {
@@ -66,15 +70,6 @@ module.exports = {
    * @param {string}  paths.assets                  Path to the project's assets.
    * @param {string}  paths.build                   Path to the project's build directory where the
    *                                                final output should be placed.
-   * @param {string}  paths.tmp                     Path where temporary files should be put.
-   * @param {string}  paths.watch                   Path to the files which should be watched for
-   *                                                changes while the griddle serve is running and
-   *                                                trigger a rebuild as changes occur.
-   * @param {string}  paths.unitTests               Path to the project's unit tests. These files
-   *                                                are browserified to paths.tmp prior to execution
-   * @param {string}  paths.unitTestConfig          Path to the project's karma configuration file.
-   * @param {string}  paths.integrationTestConfig   Path to the project's pesto / protractor
-   *                                                configuration file.
    * @returns {undefined}
    */
   init: function(gulp, options, configParameters, paths) {
@@ -103,9 +98,6 @@ module.exports = {
       gutil.log(util.format('Removing artifacts from %s',
           gutil.colors.magenta(paths.build)));
       var targets = [ paths.build ];
-      if (paths.tmp) {
-        targets.push(paths.tmp);
-      }
       return del(targets, { force: true }, cb);
     });
 
@@ -205,71 +197,6 @@ module.exports = {
       return gulp.src(paths.html)
           .pipe(cb(paths.build))
           .pipe(gulp.dest(paths.build));
-    });
-
-    /**
-     * Bundles all unit tests into a single file for testing.
-     */
-    gulp.task('browserify-unit-tests', function() {
-      return gulp.src(paths.unitTests, { read: false })
-        .pipe(browserify())
-        .pipe(gulp.dest(paths.tmp));
-    });
-
-    /**
-     * Run project unit tests using Karma.
-     */
-    gulp.task('run-unit-tests', ['browserify-unit-tests'], function(done) {
-      karma.server.start({
-        // Karma needs an absolute path to the configuration file so attempt to resolve
-        configFile: path.resolve(paths.base, paths.base, paths.unitTestConfig),
-        singleRun: true
-      }, done);
-    });
-
-    /**
-     * Run integration tests using Pesto
-     */
-    gulp.task('run-integration-tests', function(done) {
-      // We don't need to build since griddle does it for us.
-      server.start({ base: paths.base, serve: paths.build }).then(
-        function() {
-          pesto(paths.integrationTestConfig).then(function(passed) {
-            server.stop().then(function() {
-              if (passed) {
-                done();
-              } else {
-                done(false);
-              }
-            });
-          });
-        }
-      );
-    });
-
-    /**
-     * Combined test task which executes both the unit and integration tests
-     */
-    gulp.task('test', ['run-unit-tests', 'run-integration-tests']);
-
-    /**
-     * Task for starting a griddle + express based HTTP server.
-     */
-    gulp.task('start-server', function(done) {
-      var opts = { base: paths.base, serve: paths.build };
-      if (paths.watch) {
-        opts.watch = paths.watch;
-      }
-      server.start(opts).then(
-        function(event) {
-          gutil.log('Server listening: ' + gutil.colors.magenta(event.data));
-          done();
-        },
-        function(e) {
-          gutil.log(gutil.colors.red(e));
-          done();
-        }
-      );
     });
 
     /**

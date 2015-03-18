@@ -9,11 +9,5 @@
    jshint: 'app/**/*.js',
    js: 'app/app.js',
    assets: 'app/assets/**/*',
-   build: 'build',
-   watch: 'app',
-   tmp: 'tmp',
-   unitTests: 'app/**/*-test.js',
-   unitTestConfig: 'unit-tests.conf.js',
-   integrationTestConfig: 'integration-tests.conf.js',
-   integrationTests: 'integration-tests/**/*-it.js'
+   build: 'build'
  };
