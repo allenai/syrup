@@ -251,7 +251,6 @@ module.exports = {
      */
     gulp.task('set-config', ['html'], function() {
       if (configParameters) {
-        gutil.log('Replacing configuration parameters in index html with those provided.');
         var configKeys = Object.getOwnPropertyNames(configParameters || {});
         var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g')
         return gulp.src(path.resolve(paths.build, path.basename(paths.html)))
@@ -260,7 +259,7 @@ module.exports = {
           }))
           .pipe(gulp.dest(paths.build));
       } else {
-        gutil.log('No configuration parameters provided.');
+        gutil.log(gutil.colors.yellow('No configuration parameters provided.'));
       }
     });
 
