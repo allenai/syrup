@@ -22,9 +22,7 @@
   "devDependencies": {
     "gulp": "3.8.9",
     "less": "1.7.5",
-    "mocha": "2.0.1",
-    "ncp": "1.0.1",
-    "promise": "6.1.0"
+    "mocha": "2.0.1"
   },
   "dependencies": {
     "browserify": "9.0.3",
