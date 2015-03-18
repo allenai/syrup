@@ -274,7 +274,9 @@ module.exports = {
     /**
      * Combined build task. This bundles up all required UI resources.
      */
-    gulp.task('build', ['clean', 'assets', 'jslint', 'js', 'less', 'html', 'set-config']);
+    gulp.task('build', ['clean'], function() {
+      return gulp.start(['assets', 'jslint', 'js', 'less', 'html', 'set-config']);
+    });
 
     /**
      * Default task. Gets executed when gulp is called without arguments.
