@@ -15,4 +15,4 @@ module.exports = {
 },{"./bar":1}]},{},[2])
 
 
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=foo.js.map

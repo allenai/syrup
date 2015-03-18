@@ -11,8 +11,7 @@ var gutil = require('gulp-util');
 var gif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var sourcemaps = require('gulp-sourcemaps');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
+var transform = require('vinyl-transform');
 var karma = require('karma');
 var pesto = require('pesto');
 var stylish = require('jshint-stylish');
@@ -108,7 +107,7 @@ module.exports = {
      */
     gulp.task('less', function() {
       gutil.log(util.format('Compiling %s to %s',
-          gutil.colors.magenta(paths.less), gutil.colors.magenta(paths.build)));
+          gutil.colors.magenta(paths.less), gutil.colors.magenta(paths.build + paths.less)));
       return gulp.src(paths.less)
         .pipe(less({ compress: options.compressCss !== false }))
         .pipe(autoprefixer('last 2 versions'))
@@ -138,18 +137,18 @@ module.exports = {
         )
       );
 
-      var bundler = browserify({
-        entries: paths.js,
-        debug: true,
-        transform: stringify({ extensions: ['.html'], minify: true })
+      var bundler = transform(function(filename) {
+        return browserify({
+          entries: filename,
+          debug: true
+        }).bundle();
       });
 
-      return bundler.bundle()
+      return gulp.src(paths.js)
+        .pipe(bundler)
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source(out))
-        .pipe(buffer())
-        .pipe(gif(options.compressJs !== false, uglify()))
         .pipe(gif(options.sourcemap !== false, sourcemaps.init({ loadMaps: true })))
+        .pipe(gif(options.compressJs !== false, uglify()))
         .pipe(gif(options.sourcemap !== false, sourcemaps.write('./')))
         .pipe(gulp.dest(paths.build));
     });

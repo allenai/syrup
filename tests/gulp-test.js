@@ -76,7 +76,7 @@ describe('syrup.gulp.init()', function() {
       // Make sure we don't get any HTML (as it uses the default path), but that we do
       // get javascript.  This isn't the *best* test, but it'll do for now.
       assert(!fs.existsSync(path.resolve(ANOTHER_PROJECT_BUILD_DIR, 'index.html')));
-      assert(fs.existsSync(path.resolve(ANOTHER_PROJECT_BUILD_DIR, 'app.js')));
+      assert(fs.existsSync(path.resolve(ANOTHER_PROJECT_BUILD_DIR, 'foo.js')));
       done();
     });
   });
@@ -99,7 +99,7 @@ describe('syrup.gulp.init()', function() {
       assert(
         fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html'))
           .toString()
-          .indexOf('app.js?cb=d9b8d8d662f70b36da1ca185dc52e9a34dcdba9f') !== -1
+          .indexOf('foo.js?cb=bb4e57cd7498eb22548956d8e74908f643f5cb71') !== -1
       );
       done();
     });
@@ -134,10 +134,10 @@ describe('syrup.gulp.init()', function() {
   it('combines js', function(done) {
     initDefaultProject();
     gulp.start('js', function() {
-      assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'app.js')));
+      assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')));
       assert.equal(
-          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'app.js')).toString(),
-          fs.readFileSync(path.resolve(PROJECT_ROOT, 'app.expected.js')).toString()
+          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')).toString(),
+          fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.expected.js')).toString()
         );
       done();
     });
@@ -163,10 +163,10 @@ describe('syrup.gulp.init()', function() {
       require(path.resolve(PROJECT_ROOT, 'paths.js'))
     );
     gulp.start('js', function() {
-      assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'app.js')));
+      assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')));
       assert.equal(
-          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'app.js')).toString(),
-          fs.readFileSync(path.resolve(PROJECT_ROOT, 'app.uncompressed.expected.js')).toString()
+          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')).toString(),
+          fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.uncompressed.expected.js')).toString()
         );
       done();
     })
@@ -175,7 +175,7 @@ describe('syrup.gulp.init()', function() {
   it('produces sourcemaps', function(done) {
     initDefaultProject();
     gulp.start('js', function() {
-      assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'app.js.map')));
+      assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js.map')));
       done();
     });
   });
@@ -188,7 +188,7 @@ describe('syrup.gulp.init()', function() {
       require(path.resolve(PROJECT_ROOT, 'paths.js'))
     );
     gulp.start('js', function() {
-      assert(!fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'app.js.map')));
+      assert(!fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js.map')));
       done();
     });
   });
