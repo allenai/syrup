@@ -12,7 +12,7 @@ npm install syrup
 
 ## API
 
-### syrup.gulp.tasks(gulp, configParameters, configKeys, paths)
+### syrup.gulp.init(gulp, configParameters, configKeys, paths)
 
 ```javascript
 /**
@@ -61,7 +61,7 @@ npm install syrup
  *                                                configuration file.
  * @returns {undefined}
  */
-syrup.gulp.tasks(gulp, options, configParameters, paths)
+syrup.gulp.init(gulp, options, configParameters, paths)
 ```
 
 The default paths are as follows.
@@ -133,7 +133,7 @@ Example:
 var gulp = require('gulp');
 var syrup = require('syrup');
 
-syrup.gulp.tasks(gulp);
+syrup.gulp.init(gulp);
 ```
 
 Now, from the command line run:
