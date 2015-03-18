@@ -35,9 +35,9 @@ describe('syrup.gulp.init()', function() {
     assert.throws(syrup.gulp.init.bind(syrup.gulp.init, {}), 'Invalid gulp instance');
   });
 
-  it('throws an exception without a valid paths instance', function() {
-    initDefaultProject();
-    assert.throws(syrup.gulp.init.bind(syrup.gulp.init, gulp), 'Invalid paths');
+  it('uses the default paths if none are specified', function() {
+    // Just make sure there's no exception, as there's no way to inspect paths
+    syrup.gulp.init(gulp, { silent: true });
   });
 
   it('moves html', function(done) {
