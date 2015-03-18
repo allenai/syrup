@@ -12,7 +12,6 @@ module.exports = {
   foo: b.bar,
 };
 
-},{"./bar":1}]},{},[2])
-
+},{"./bar":1}]},{},[2]);
 
 //# sourceMappingURL=foo.js.map

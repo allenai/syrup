@@ -138,9 +138,7 @@ module.exports = {
         )
       );
 
-      var bundler = browserify({ debug: true });
-
-      var bundler = browserify({ debug: true });
+      var bundler = browserify({ debug: options.sourceMaps, detectGlobals: false });
       bundler.transform(stringify({ extensions: ['.html'], minify: true }));
       // Browserify can't handle purely relative paths, so resolve the path for them...
       bundler.add(path.resolve(paths.base, paths.js));
@@ -149,9 +147,9 @@ module.exports = {
       return bundler.bundle()
         .pipe(source(path.basename(paths.js)))
         .pipe(buffer())
-        .pipe(gif(options.sourcemap !== false, sourcemaps.init({ loadMaps: true })))
+        .pipe(gif(options.sourceMaps !== false, sourcemaps.init({ loadMaps: true })))
         .pipe(gif(options.compressJs !== false, uglify()))
-        .pipe(gif(options.sourcemap !== false, sourcemaps.write('./')))
+        .pipe(gif(options.sourceMaps !== false, sourcemaps.write('./')))
         .pipe(gulp.dest(paths.build));
     });
 
@@ -276,7 +274,7 @@ module.exports = {
     /**
      * Combined build task. This bundles up all required UI resources.
      */
-    gulp.task('build', ['assets', 'jslint', 'js', 'less', 'html', 'set-config']);
+    gulp.task('build', ['clean', 'assets', 'jslint', 'js', 'less', 'html', 'set-config']);
 
     /**
      * Default task. Gets executed when gulp is called without arguments.

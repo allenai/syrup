@@ -228,7 +228,7 @@ describe('syrup.gulp.init()', function() {
     assert(typeof gulp.tasks['build'] === 'object');
     assert.deepEqual(
       gulp.tasks['build'].dep,
-      ['assets', 'jslint', 'js', 'less', 'html', 'set-config']
+      ['clean', 'assets', 'jslint', 'js', 'less', 'html', 'set-config']
     );
   });
 
