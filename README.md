@@ -36,7 +36,6 @@ npm install syrup
  * @param {string}  paths.base                    The base directory of your project where the
  *                                                gulpfile itself lives.  Defaults to
  *                                                process.cwd().
- * @param {string}  paths.src                     Path to the application's source files.
  * @param {string}  paths.html                    Path to the project's HTML files.
  * @param {string}  paths.jshint                  Path to javascript files which should be linted
  *                                                using jshint.

@@ -25,6 +25,16 @@ var server = require('../server');
 var merge = require('../merge');
 var defaultPaths = require('./default-paths');
 
+/**
+ * @private
+ * Returns the top most directory in the specified path, removing any glob style wildcards (*).
+ */
+var topDirectory = function(p) {
+  return p.split(path.sep).filter(function(part) {
+    return part.indexOf('*') === -1;
+  }).pop();
+};
+
 module.exports = {
   /**
    * Registers default gulp tasks.
@@ -47,7 +57,6 @@ module.exports = {
    * @param {string}  paths.base                    The base directory of your project where the
    *                                                gulpfile itself lives.  Defaults to
    *                                                process.cwd().
-   * @param {string}  paths.src                     Path to the application's source files.
    * @param {string}  paths.html                    Path to the project's HTML files.
    * @param {string}  paths.jshint                  Path to javascript files which should be linted
    *                                                using jshint.
@@ -55,7 +64,6 @@ module.exports = {
    *                                                browserify.
    * @param {string}  paths.less                    Path to the project's less files.
    * @param {string}  paths.assets                  Path to the project's assets.
-   * @param {string}  paths.fonts                   Path to the project's fonts.
    * @param {string}  paths.build                   Path to the project's build directory where the
    *                                                final output should be placed.
    * @param {string}  paths.tmp                     Path where temporary files should be put.
@@ -154,18 +162,38 @@ module.exports = {
     });
 
     /**
-     * Copies static assets.
+     * Copies fonts and icons into the assets directory.
+     *
+     * This task first copies user-assets, then pipes syrup based assets (currently /fonts
+     * and /icons into the asset directory).
      */
-    gulp.task('assets', function() {
+    gulp.task('assets', ['user-assets'], function() {
+      var assetDir = topDirectory(paths.assets);
+      var dest = paths.build + path.sep + assetDir;
+      var iconAndFontBase = path.resolve(__dirname, '..');
+      var iconsAndFontPaths = [
+        path.resolve(iconAndFontBase, 'fonts', '**', '*'),
+        path.resolve(iconAndFontBase, 'icons', '**', '*'),
+      ];
+      return gulp.src(iconsAndFontPaths, { base: iconAndFontBase })
+        .pipe(gulp.dest(dest));
+    });
+
+    /**
+     * Copies user specific assets.
+     */
+   gulp.task('user-assets', function() {
+      var assetDir = topDirectory(paths.assets);
+      var dest = paths.build + path.sep + assetDir;
       gutil.log(
         util.format(
           'Copying %s to %s',
           gutil.colors.magenta(paths.assets),
-          gutil.colors.magenta(paths.build)
+          gutil.colors.magenta(dest)
         )
       );
-      return gulp.src(paths.assets, { base: paths.src })
-          .pipe(gulp.dest(paths.build));
+      return gulp.src(paths.assets)
+          .pipe(gulp.dest(dest));
     });
 
     /**
