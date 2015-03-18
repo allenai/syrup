@@ -1,61 +1,81 @@
 'use strict';
 
 var cb = require('gulp-cache-breaker');
+var fs = require('fs');
 var autoprefixer = require('gulp-autoprefixer');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var del = require('del');
 var gutil = require('gulp-util');
 var gif = require('gulp-if');
 var jshint = require('gulp-jshint');
+var sourcemaps = require('gulp-sourcemaps');
+var buffer = require('vinyl-buffer');
+var source = require('vinyl-source-stream');
 var karma = require('karma');
 var pesto = require('pesto');
 var stylish = require('jshint-stylish');
 var util = require('util');
 var path = require('path');
+var replace = require('gulp-replace');
 var stringify = require('stringify');
 var server = require('../server');
+var merge = require('../merge');
+var defaultPaths = require('./default-paths');
 
 module.exports = {
   /**
-   * Registers several default gulp tasks.
+   * Registers default gulp tasks.
    *
    * @param {object}  gulp                          The gulp library.
-   * @param {object}  paths                         An object defining a series of paths required
-   *                                                for the various tasks.
-   * @param {string}  paths.base                    The base path to the project.
+   * @param {object}  options                       Optional object definining configuration
+   *                                                parameters.
+   * @param {object}  options.compressJs            If true javascript will be minified. Defaults
+   *                                                to true.
+   * @param {object}  options.sourceMaps            Enables javascript source maps. Defaults to
+   *                                                true.
+   * @param {object}  options.compressCss           If true styles will be compressed. Defaults to
+   *                                                true.
+   * @param {string}  options.jsOut                 Sets the name of the javascript file produced
+   *                                                by the javascript build step. Defaults to
+   *                                                "app.js".
+   * @param {object}  configParameters              Optional map of configuration keys. If set each
+   *                                                key is searched for in the html contents of the
+   *                                                application and replaced with the corresponding
+   *                                                value.
+   * @param {object}  paths                         Optional object defining paths relevant to the
+   *                                                project. If not specified the defaults are used.
+   * @param {string}  paths.base                    The base directory of your project where the
+   *                                                gulpfile itself lives.  Defaults to
+   *                                                process.cwd().
+   * @param {string}  paths.src                     Path to the application's source files.
    * @param {string}  paths.html                    Path to the project's HTML files.
-   * @param {string}  paths.js                      Path to ALL of the project's JS files which will
-   *                                                be linted.
-   * @param {string}  paths.jsMain                  Path to the project's JS entry-point.  This entry
-   *                                                point is used for the purpose of concatenating
-   *                                                all javascript files into a single script
-   *                                                for inclusion.
-   * @param {string}  paths.less                    Path to the project's LESS files.
+   * @param {string}  paths.jshint                  Path to javascript files which should be linted
+   *                                                using jshint.
+   * @param {string}  paths.js                      Path to javascript files to be bundled using
+   *                                                browserify.
+   * @param {string}  paths.less                    Path to the project's less files.
    * @param {string}  paths.assets                  Path to the project's assets.
    * @param {string}  paths.fonts                   Path to the project's fonts.
    * @param {string}  paths.build                   Path to the project's build directory where the
    *                                                final output should be placed.
-   * @param {string}  paths.tmp                     Path where temporary files (like browserified)
-   *                                                unit tests should be put.
-   * @param {string}  paths.watch                   Path to the files which should be watched for changes
-   *                                                while the griddle serve is running and trigger
-   *                                                a rebuild as changes occur.
-   * @param {string}  paths.unitTests               Path to the project's unit tests.  These files are
-   *                                                browserified to paths.tmp prior to execution
+   * @param {string}  paths.tmp                     Path where temporary files should be put.
+   * @param {string}  paths.watch                   Path to the files which should be watched for
+   *                                                changes while the griddle serve is running and
+   *                                                trigger a rebuild as changes occur.
+   * @param {string}  paths.unitTests               Path to the project's unit tests. These files
+   *                                                are browserified to paths.tmp prior to execution
    * @param {string}  paths.unitTestConfig          Path to the project's karma configuration file.
    * @param {string}  paths.integrationTestConfig   Path to the project's pesto / protractor
    *                                                configuration file.
-   * @param {string}  env                           An enviroment flag. Valid values are 'dev'
-   *                                                and 'prod'.
-   * @param {boolean} [silent=false]                Optional boolean which silences log output if
-   *                                                set to true.  Defaults to false.
-   *
    * @returns {undefined}
    */
-  tasks: function(gulp, paths, env, silent) {
-    if(silent === true) {
+  init: function(gulp, options, configParameters, paths, silent) {
+    // Produce paths by merging any user specified paths with the defaults.
+    paths = merge(defaultPaths, paths);
+
+    if(options.silent === true) {
       gutil.log = gutil.noop;
     }
 
@@ -81,70 +101,84 @@ module.exports = {
     });
 
     /**
-     * Compiles LESS files.
+     * Compiles less files to css.
      */
-    gulp.task('less', [ 'clean' ], function() {
+    gulp.task('less', function() {
       gutil.log(util.format('Compiling %s to %s',
           gutil.colors.magenta(paths.less), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.less)
-        .pipe(less({ compress: env !== 'dev' }))
+        .pipe(less({ compress: options.compressCss !== false }))
         .pipe(autoprefixer('last 2 versions'))
         .pipe(gulp.dest(paths.build));
     });
 
     /**
-     * Lints Javascript
+     * Lints javascript
      */
     gulp.task('jslint', function() {
-      gutil.log(util.format('Linting %s', gutil.colors.magenta(paths.js)));
-      return gulp.src(paths.js)
+      gutil.log(util.format('Linting %s', gutil.colors.magenta(paths.jshint)));
+      return gulp.src(paths.jshint)
         .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
         .pipe(jshint.reporter(stylish));
     });
 
     /**
-     * Compiles Javascript.
+     * Bundles, compresses and produces sourcemaps for javascript.
      */
-    gulp.task('js', [ 'clean' ], function() {
-      gutil.log(util.format('Compiling %s to %s',
-          gutil.colors.magenta(paths.jsMain), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.jsMain, { read: false })
-        .pipe(browserify({ transform: stringify({ extensions: ['.html'], minify: true }) }))
-        .pipe(gif(env !== 'dev', uglify()))
-        .pipe(gulp.dest(paths.build));
+    gulp.task('js', function() {
+      var jsPath = path.resolve(paths.base, paths.js);
+
+      gutil.log(
+        util.format(
+          'Compiling %s to %s',
+          gutil.colors.magenta(jsPath),
+          gutil.colors.magenta(path.resolve(paths.build, options.jsOut || 'app.js'))
+        )
+      );
+
+      if (fs.existsSync(jsPath)) {
+        var bundler = browserify({
+          entries: [jsPath],
+          debug: true,
+          transform: stringify({ extensions: ['.html'], minify: true })
+        });
+
+        return bundler.bundle()
+          .pipe(source(options.jsOut || 'app.js'))
+          .pipe(buffer())
+          .pipe(gif(options.sourcemap !== false, sourcemaps.init({loadMaps: true})))
+          .pipe(gif(options.compressJs !== false, uglify()))
+          .pipe(gif(options.sourcemap !== false, sourcemaps.write('./')))
+          .pipe(gulp.dest(paths.build));
+      } else {
+        gutil.log(
+          util.format(
+            'No js files found at %s to bundle',
+            gutil.colors.magenta(jsPath)
+          )
+        );
+      }
     });
 
     /**
      * Copies static assets.
      */
-    gulp.task('assets', [ 'clean' ], function() {
-      // Remove any * characters from the pattern and derive the directory name as
-      // this will preserve the root path to the assets themselves which is likely
-      // ideal.
-      // TODO: Another option would be to configure this via an optional path (path.assetBase ore
-      // something akin to that).  This way the user could toggle this behavior
-      var base = path.dirname(path.resolve(paths.assets.replace(/\*/g, '')));
-      gutil.log(util.format('Copying %s to %s',
-          gutil.colors.magenta(paths.assets), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.assets, { base: base })
-          .pipe(gulp.dest(paths.build));
-    });
-
-    /**
-     * Copies static fonts.
-     */
-    gulp.task('fonts', [ 'clean' ], function() {
-      var base = path.dirname(path.resolve(paths.fonts.replace(/\*/g, '')));
-      gutil.log(util.format('Copying %s to %s',
-          gutil.colors.magenta(paths.fonts), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.fonts, { base: base })
+    gulp.task('assets', function() {
+      gutil.log(
+        util.format(
+          'Copying %s to %s',
+          gutil.colors.magenta(paths.assets),
+          gutil.colors.magenta(paths.build)
+        )
+      );
+      return gulp.src(paths.assets, { base: paths.src })
           .pipe(gulp.dest(paths.build));
     });
 
     /**
      * Copies all html files to the build directory.
      */
-    gulp.task('html', [ 'clean', 'js', 'less', 'assets', 'fonts' ], function() {
+    gulp.task('html', [ 'js', 'less', 'assets' ], function() {
       gutil.log(util.format('Copying %s to %s',
           gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
       return gulp.src(paths.html)
@@ -153,7 +187,7 @@ module.exports = {
     });
 
     /**
-     * Combines all unit tests into a single file for testing.
+     * Bundles all unit tests into a single file for testing.
      */
     gulp.task('browserify-unit-tests', function() {
       return gulp.src(paths.unitTests, { read: false })
@@ -167,7 +201,7 @@ module.exports = {
     gulp.task('run-unit-tests', ['browserify-unit-tests'], function(done) {
       karma.server.start({
         // Karma needs an absolute path to the configuration file so attempt to resolve
-        configFile: path.resolve(process.cwd(), paths.base, paths.unitTestConfig),
+        configFile: path.resolve(paths.base, paths.base, paths.unitTestConfig),
         singleRun: true
       }, done);
     });
@@ -216,5 +250,43 @@ module.exports = {
         }
       );
     });
+
+    /**
+     * Sets configuration data.
+     */
+    gulp.task('set-config', ['html'], function() {
+      if(configParameters) {
+        gutil.log('Replacing configuration parameters in index html with those provided.');
+        var configKeys = Object.getOwnPropertyNames(configParameters || {});
+        var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g')
+        return gulp.src(path.resolve(paths.build, path.basename(paths.html)))
+          .pipe(replace(reConfigKeys, function(key) {
+            return configParameters[key] || '';
+          }))
+          .pipe(gulp.dest(paths.build));
+      } else {
+        gutil.log('No configuration parameters provided.');
+      }
+    });
+
+    /**
+     * Watches specific files and rebuilds only the changed component(s).
+     */
+    gulp.task('watch', ['build'], function() {
+      gulp.watch(config.paths.js, ['jslint', 'js', 'html', 'set-config']);
+      gulp.watch(config.paths.allLess, ['less', 'html', 'set-config']);
+      gulp.watch(config.paths.assets, ['assets', 'html', 'set-config']);
+      gulp.watch(config.paths.html, ['html', 'set-config']);
+    });
+
+    /**
+     * Combined build task. This bundles up all required UI resources.
+     */
+    gulp.task('build', ['assets', 'jslint', 'js', 'less', 'html', 'set-config']);
+
+    /**
+     * Default task. Gets executed when gulp is called without arguments.
+     */
+    gulp.task('default', ['build']);
   }
 };

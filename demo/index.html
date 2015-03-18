@@ -47,37 +47,20 @@
           <code><pre>
 var gulp = require('gulp');
 var syrup = require('syrup');
-syrup.gulp.tasks(
-  gulp,
-  {
-    base: __dirname,
-    html: 'src/**/*.html',
-    less: 'src/styles.less',
-    js: 'src/main.js',
-    assets: 'src/assets/**/*',
-    fonts: 'node_modules/syrup/fonts/**/*',
-    build: 'build',
-    tmp: 'tmp',
-    watch: 'src/',
-    unitTests: 'src/**/*-test.js',
-    unitTestConfig: 'karma.conf.js',
-    integrationTestConfig: 'protractor.conf.js'
-  },
-  'dev',
-);</pre></code>
+syrup.gulp.tasks(gulp)</pre></code>
         <h4>LESS</h4>
         <code><pre>
 @import '../node_modules/syrup/less/syrup.less'</pre></code>
         <h4>HTML</h4>
         <p>Take a look at the example components below!</p>
       </section>
-      
+
       <section id="header">
         <h2 class="header-with-rule">Site Header</h2>
         <header><div class="max-width-content"><span>My Application</span></div></header>
         <code><pre>&lt;header&gt;&lt;div class="max-width-content"&gt;&lt;span&gt;My Application&lt;/span&gt;&lt;div&gt;&lt;header&gt;</pre></code>
       </section>
-      
+
       <section id="headers">
         <h2 class="header-with-rule">Headers</h2>
         <h1>Header 1</h2>
@@ -93,7 +76,7 @@ syrup.gulp.tasks(
         <h6>Header 6</h6>
         <code><pre>&lt;h6&gt;Header 6&lt;/h6&gt;</pre></code>
       </section>
-      
+
       <section id="sections">
         <h2 class="header-with-rule">Content Sections</h2>
         <section>
@@ -115,7 +98,7 @@ syrup.gulp.tasks(
   Another Section
 &lt;/section&gt;</pre></code>
       </section>
-      
+
       <section id="rules">
         <h2 class="header-with-rule">Rules</h2>
         <hr>
@@ -143,7 +126,7 @@ short ribs. Capicola kevin meatloaf, turkey short loin chuck pig short ribs baco
 t-bone sausage pork loin. Pork belly shank rump prosciutto short loin, landjaeger jowl pig
 porchetta pancetta.&lt;/p&gt;</pre></code>
       </section>
-      
+
       <section id="floats">
         <h2 class="header-with-rule">Floats</h2>
         <div class="clearfix">
@@ -155,7 +138,7 @@ porchetta pancetta.&lt;/p&gt;</pre></code>
   &lt;div class="right"&gt;And now two on the right.&lt;/div&gt;
 &lt;/div&gt;</pre></code>
       </section>
-      
+
       <section id="code">
         <h2 class="header-with-rule">Code</h2>
         <code><pre>
@@ -170,7 +153,7 @@ if(foo.isAwesome()) {
   foo.celebrate();
 }&lt;/pre&gt;&lt;/code&gt;</pre></code>
       </section>
-      
+
       <section id="forms">
         <h2 class="header-with-rule">Forms</h2>
         <form>
@@ -216,7 +199,7 @@ if(foo.isAwesome()) {
           <code><pre>&lt;a href="#forms" class="btn btn-sm btn-green"&gt;I'm Smaller, Click Me!&lt;/a&gt;</pre></code>
         </form>
       </section>
-      
+
       <section id="icons">
         <h2 class="header-with-rule">Icons</h2>
         <span class="icon-application"></span>
@@ -255,7 +238,7 @@ if(foo.isAwesome()) {
           <pre>&lt;span class="icon-application"&gt;&lt;/span&gt;<br>&lt;span class="icon-check"&gt;&lt;/span&gt;<br>&lt;span class="icon-checklist"&gt;&lt;/span&gt;<br>&lt;span class="icon-citation"&gt;&lt;/span&gt;<br>&lt;span class="icon-clusters"&gt;&lt;/span&gt;<br>&lt;span class="icon-code"&gt;&lt;/span&gt;<br>&lt;span class="icon-datasets"&gt;&lt;/span&gt;<br>&lt;span class="icon-details"&gt;&lt;/span&gt;<br>&lt;span class="icon-doc"&gt;&lt;/span&gt;<br>&lt;span class="icon-experimental"&gt;&lt;/span&gt;<br>&lt;span class="icon-eye"&gt;&lt;/span&gt;<br>&lt;span class="icon-gear"&gt;&lt;/span&gt;<br>&lt;span class="icon-lineage"&gt;&lt;/span&gt;<br>&lt;span class="icon-list"&gt;&lt;/span&gt;<br>&lt;span class="icon-map"&gt;&lt;/span&gt;<br>&lt;span class="icon-minus"&gt;&lt;/span&gt;<br>&lt;span class="icon-open"&gt;&lt;/span&gt;<br>&lt;span class="icon-paintbrush"&gt;&lt;/span&gt;<br>&lt;span class="icon-plus"&gt;&lt;/span&gt;<br>&lt;span class="icon-pointer_down"&gt;&lt;/span&gt;<br>&lt;span class="icon-pointer_left"&gt;&lt;/span&gt;<br>&lt;span class="icon-pointer_right"&gt;&lt;/span&gt;<br>&lt;span class="icon-pointer_up"&gt;&lt;/span&gt;<br>&lt;span class="icon-problems"&gt;&lt;/span&gt;<br>&lt;span class="icon-reading_list"&gt;&lt;/span&gt;<br>&lt;span class="icon-search"&gt;&lt;/span&gt;<br>&lt;span class="icon-star"&gt;&lt;/span&gt;<br>&lt;span class="icon-survey"&gt;&lt;/span&gt;<br>&lt;span class="icon-syrup"&gt;&lt;/span&gt;<br>&lt;span class="icon-techiniques"&gt;&lt;/span&gt;<br>&lt;span class="icon-theoretical"&gt;&lt;/span&gt;<br>&lt;span class="icon-x"&gt;&lt;/span&gt;</pre>
         </code>
       </section>
-      
+
       <section id="messaging">
         <h2 class="header-with-rule">Messaging</h2>
         <p class="msg msg-success"><strong>Success:</strong> Bacon ipsum dolor amet doner pork chop ham brisket.</p>
@@ -267,7 +250,7 @@ if(foo.isAwesome()) {
           prosciutto pork swine short ribs.</p>
         <code><pre>&lt;p class="msg msg-error"&gt;&lt;strong&gt;Error!&lt;/strong&gt Bacon meatball meatloaf hamburger. Porchetta turkey leberkas, ball tip fatback sirloin beef ribs.&lt;/p&gt;</pre></code>
       </section>
-      
+
       <section id="footer">
         <h2 class="header-with-rule">Footer</h2>
         <footer id="footer">
