@@ -105,7 +105,8 @@ module.exports = {
         });
         if (watch) {
           bundlerInstance = watchify(b);
-          bundlerInstance.on('bundler', function() {
+          bundlerInstance.on('update', function() {
+            gutil.log(gutil.colors.cyan('Javascript update detected, rebundling...'));
             gulp.start('html-js');
           });
         } else {
