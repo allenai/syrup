@@ -71,7 +71,7 @@ module.exports = {
    *                                                configuration file.
    * @returns {undefined}
    */
-  init: function(gulp, options, configParameters, paths, silent) {
+  init: function(gulp, options, configParameters, paths) {
     // Produce paths by merging any user specified paths with the defaults.
     paths = merge(defaultPaths, paths);
 
