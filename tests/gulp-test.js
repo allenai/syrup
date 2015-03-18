@@ -99,7 +99,7 @@ describe('syrup.gulp.init()', function() {
       assert(
         fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html'))
           .toString()
-          .indexOf('foo.js?cb=bb4e57cd7498eb22548956d8e74908f643f5cb71') !== -1
+          .indexOf('foo.js?cb=b35d0bbbcf8047bd694b3362ecee41f0da014480') !== -1
       );
       done();
     });

@@ -21,6 +21,7 @@ var path = require('path');
 var Buffer = require('buffer').Buffer;
 var replace = require('gulp-replace');
 var stringify = require('stringify');
+var watchify = require('watchify');
 var merge = require('../merge');
 var defaultPaths = require('./default-paths');
 
@@ -91,6 +92,29 @@ module.exports = {
       throw 'Invalid paths';
     }
 
+    // Shared bundler used both by the 'js' task and the 'watch' task for bundling javascript
+    // resources
+    var bundler = watchify(browserify({
+      debug: options.sourceMaps,
+      detectGlobals: false,
+      cache: {},
+      packageCache: {},
+      fullPaths: true
+    }));
+    bundler.transform(stringify({ extensions: ['.html'], minify: true }));
+    // Browserify can't handle purely relative paths, so resolve the path for them...
+    bundler.add(path.resolve(paths.base, paths.js));
+    bundler.on('error', gutil.log.bind(gutil, 'Browserify Error'));
+
+    // Helper method for copying html, see 'html-only' and 'html' tasks.
+    var copyHtml = function() {
+      gutil.log(util.format('Copying %s to %s',
+          gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
+      return gulp.src(paths.html)
+          .pipe(cb(paths.build))
+          .pipe(gulp.dest(paths.build));
+    };
+
     /**
      * Removes all build artifacts.
      */
@@ -127,25 +151,16 @@ module.exports = {
      * Bundles, compresses and produces sourcemaps for javascript.
      */
     gulp.task('js', function() {
-      // TODO: Currently this means glob based patterns aren't supported.
-      var filename = path.basename(paths.js);
-
+      var fn = path.basename(paths.js);
       gutil.log(
         util.format(
           'Compiling %s to %s',
           gutil.colors.magenta(paths.js),
-          gutil.colors.magenta(path.resolve(paths.build, filename))
+          gutil.colors.magenta(path.resolve(paths.build, fn))
         )
       );
-
-      var bundler = browserify({ debug: options.sourceMaps, detectGlobals: false });
-      bundler.transform(stringify({ extensions: ['.html'], minify: true }));
-      // Browserify can't handle purely relative paths, so resolve the path for them...
-      bundler.add(path.resolve(paths.base, paths.js));
-      bundler.on('error', gutil.log.bind(gutil, 'Browserify Error'));
-
       return bundler.bundle()
-        .pipe(source(path.basename(paths.js)))
+        .pipe(source(fn))
         .pipe(buffer())
         .pipe(gif(options.sourceMaps !== false, sourcemaps.init({ loadMaps: true })))
         .pipe(gif(options.compressJs !== false, uglify()))
@@ -189,15 +204,18 @@ module.exports = {
     });
 
     /**
+     * The following html gulp tasks are for use with gulp.watch.  Each is tied to particular
+     * dependency.
+     */
+    gulp.task('html-only', copyHtml);
+    gulp.task('html-js', [ 'js' ], copyHtml);
+    gulp.task('html-less', [ 'less' ], copyHtml);
+    gulp.task('html-assets', [ 'assets' ], copyHtml);
+
+    /**
      * Copies all html files to the build directory.
      */
-    gulp.task('html', [ 'js', 'less', 'assets' ], function() {
-      gutil.log(util.format('Copying %s to %s',
-          gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
-      return gulp.src(paths.html)
-          .pipe(cb(paths.build))
-          .pipe(gulp.dest(paths.build));
-    });
+    gulp.task('html', [ 'js', 'less', 'assets'], copyHtml);
 
     /**
      * Sets configuration data.
@@ -219,11 +237,16 @@ module.exports = {
     /**
      * Watches specific files and rebuilds only the changed component(s).
      */
-    gulp.task('watch', ['build'], function() {
-      gulp.watch(config.paths.js, ['jslint', 'js', 'html', 'set-config']);
-      gulp.watch(config.paths.allLess, ['less', 'html', 'set-config']);
-      gulp.watch(config.paths.assets, ['assets', 'html', 'set-config']);
-      gulp.watch(config.paths.html, ['html', 'set-config']);
+    gulp.task('watch', ['build'], function(cb) {
+      var b = getBundler();
+      // A file has been updated.  Create a bundle, then update the HTML file with the
+      // latest cache-broken js link
+      b.on('update', function() {
+        gulp.start('html-js');
+      });
+      gulp.watch(paths.allLess, ['html-less', 'set-config']);
+      gulp.watch(paths.assets, ['html-assets', 'set-config']);
+      gulp.watch(paths.html, ['html-only', 'set-config']);
     });
 
     /**
