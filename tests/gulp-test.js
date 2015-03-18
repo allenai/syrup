@@ -37,7 +37,7 @@ describe('syrup.gulp.init()', function() {
 
   it('uses the default paths if none are specified', function() {
     // Just make sure there's no exception, as there's no way to inspect paths
-    syrup.gulp.init(gulp, { silent: true });
+    syrup.gulp.init(gulp);
   });
 
   it('moves html', function(done) {

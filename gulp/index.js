@@ -75,15 +75,18 @@ module.exports = {
     // Produce paths by merging any user specified paths with the defaults.
     paths = merge(defaultPaths, paths);
 
-    if(options.silent === true) {
+    if (typeof options !== 'object') {
+      options = {};
+    }
+    if (options.silent === true) {
       gutil.log = gutil.noop;
     }
 
-    if(!gulp || typeof gulp.task !== 'function') {
+    if (!gulp || typeof gulp.task !== 'function') {
       throw 'Invalid gulp instance';
     }
 
-    if(!paths || typeof paths !== 'object') {
+    if (!paths || typeof paths !== 'object') {
       throw 'Invalid paths';
     }
 
@@ -94,7 +97,7 @@ module.exports = {
       gutil.log(util.format('Removing artifacts from %s',
           gutil.colors.magenta(paths.build)));
       var targets = [ paths.build ];
-      if(paths.tmp) {
+      if (paths.tmp) {
         targets.push(paths.tmp);
       }
       return del(targets, { force: true }, cb);
@@ -146,9 +149,9 @@ module.exports = {
         return bundler.bundle()
           .pipe(source(options.jsOut || 'app.js'))
           .pipe(buffer())
-          .pipe(gif(options.sourcemap !== false, sourcemaps.init({loadMaps: true})))
-          .pipe(gif(options.compressJs !== false, uglify()))
-          .pipe(gif(options.sourcemap !== false, sourcemaps.write('./')))
+          .pipe(gif (options.sourcemap !== false, sourcemaps.init({loadMaps: true})))
+          .pipe(gif (options.compressJs !== false, uglify()))
+          .pipe(gif (options.sourcemap !== false, sourcemaps.write('./')))
           .pipe(gulp.dest(paths.build));
       } else {
         gutil.log(
@@ -215,7 +218,7 @@ module.exports = {
         function() {
           pesto(paths.integrationTestConfig).then(function(passed) {
             server.stop().then(function() {
-              if(passed) {
+              if (passed) {
                 done();
               } else {
                 done(false);
@@ -236,7 +239,7 @@ module.exports = {
      */
     gulp.task('start-server', function(done) {
       var opts = { base: paths.base, serve: paths.build };
-      if(paths.watch) {
+      if (paths.watch) {
         opts.watch = paths.watch;
       }
       server.start(opts).then(
@@ -255,7 +258,7 @@ module.exports = {
      * Sets configuration data.
      */
     gulp.task('set-config', ['html'], function() {
-      if(configParameters) {
+      if (configParameters) {
         gutil.log('Replacing configuration parameters in index html with those provided.');
         var configKeys = Object.getOwnPropertyNames(configParameters || {});
         var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g')
