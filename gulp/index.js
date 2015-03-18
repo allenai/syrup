@@ -92,19 +92,32 @@ module.exports = {
       throw 'Invalid paths';
     }
 
-    // Shared bundler used both by the 'js' task and the 'watch' task for bundling javascript
-    // resources
-    var bundler = watchify(browserify({
-      debug: options.sourceMaps,
-      detectGlobals: false,
-      cache: {},
-      packageCache: {},
-      fullPaths: true
-    }));
-    bundler.transform(stringify({ extensions: ['.html'], minify: true }));
-    // Browserify can't handle purely relative paths, so resolve the path for them...
-    bundler.add(path.resolve(paths.base, paths.js));
-    bundler.on('error', gutil.log.bind(gutil, 'Browserify Error'));
+    // Helper function to get browserify bundler used both by the 'js' task and the 'watch' task
+    var bundlerInstance;
+    var bundler = function(watch) {
+      if (!bundlerInstance) {
+        var b = browserify({
+          debug: options.sourceMaps,
+          detectGlobals: false,
+          cache: {},
+          packageCache: {},
+          fullPaths: true
+        });
+        if (watch) {
+          bundlerInstance = watchify(b);
+          bundlerInstance.on('bundler', function() {
+            gulp.start('html-js');
+          });
+        } else {
+          bundlerInstance = b;
+        }
+        bundlerInstance.transform(stringify({ extensions: ['.html'], minify: true }));
+        // Browserify can't handle purely relative paths, so resolve the path for them...
+        bundlerInstance.add(path.resolve(paths.base, paths.js));
+        bundlerInstance.on('error', gutil.log.bind(gutil, 'Browserify Error'));
+      }
+      return bundlerInstance;
+    };
 
     // Helper method for copying html, see 'html-only' and 'html' tasks.
     var copyHtml = function() {
@@ -159,7 +172,7 @@ module.exports = {
           gutil.colors.magenta(path.resolve(paths.build, fn))
         )
       );
-      return bundler.bundle()
+      return bundler().bundle()
         .pipe(source(fn))
         .pipe(buffer())
         .pipe(gif(options.sourceMaps !== false, sourcemaps.init({ loadMaps: true })))
@@ -237,16 +250,12 @@ module.exports = {
     /**
      * Watches specific files and rebuilds only the changed component(s).
      */
-    gulp.task('watch', ['build'], function(cb) {
-      var b = getBundler();
-      // A file has been updated.  Create a bundle, then update the HTML file with the
-      // latest cache-broken js link
-      b.on('update', function() {
-        gulp.start('html-js');
-      });
+    gulp.task('watch', function(cb) {
+      bundler(true);
       gulp.watch(paths.allLess, ['html-less', 'set-config']);
       gulp.watch(paths.assets, ['html-assets', 'set-config']);
       gulp.watch(paths.html, ['html-only', 'set-config']);
+      gulp.start('build', cb);
     });
 
     /**
