@@ -11,12 +11,14 @@ var gutil = require('gulp-util');
 var gif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var sourcemaps = require('gulp-sourcemaps');
-var transform = require('vinyl-transform');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var karma = require('karma');
 var pesto = require('pesto');
 var stylish = require('jshint-stylish');
 var util = require('util');
 var path = require('path');
+var Buffer = require('buffer').Buffer;
 var replace = require('gulp-replace');
 var stringify = require('stringify');
 var server = require('../server');
@@ -125,24 +127,27 @@ module.exports = {
      * Bundles, compresses and produces sourcemaps for javascript.
      */
     gulp.task('js', function() {
+      // TODO: Currently this means glob based patterns aren't supported.
+      var filename = path.basename(paths.js);
+
       gutil.log(
         util.format(
           'Compiling %s to %s',
           gutil.colors.magenta(paths.js),
-          gutil.colors.magenta(path.resolve(paths.build, path.basename(paths.js)))
+          gutil.colors.magenta(path.resolve(paths.build, filename))
         )
       );
 
-      var bundler = transform(function(filename) {
-        return browserify({
-          entries: filename,
-          debug: true
-        }).bundle();
-      });
+      var bundler = browserify({ debug: true });
 
-      return gulp.src(paths.js)
-        .pipe(bundler)
-        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+      var bundler = browserify({ debug: true });
+      bundler.transform(stringify({ extensions: ['.html'], minify: true }));
+      bundler.add(paths.js);
+      bundler.on('error', gutil.log.bind(gutil, 'Browserify Error'));
+
+      return bundler.bundle()
+        .pipe(source(path.basename(paths.js)))
+        .pipe(buffer())
         .pipe(gif(options.sourcemap !== false, sourcemaps.init({ loadMaps: true })))
         .pipe(gif(options.compressJs !== false, uglify()))
         .pipe(gif(options.sourcemap !== false, sourcemaps.write('./')))
