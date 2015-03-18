@@ -36,9 +36,6 @@ module.exports = {
    *                                                true.
    * @param {object}  options.compressCss           If true styles will be compressed. Defaults to
    *                                                true.
-   * @param {string}  options.jsOut                 Sets the name of the javascript file produced
-   *                                                by the javascript build step. Defaults to
-   *                                                "app.js".
    * @param {object}  configParameters              Optional map of configuration keys. If set each
    *                                                key is searched for in the html contents of the
    *                                                application and replaced with the corresponding
@@ -128,12 +125,11 @@ module.exports = {
      * Bundles, compresses and produces sourcemaps for javascript.
      */
     gulp.task('js', function() {
-      var out = options.jsOut || 'app.js';
       gutil.log(
         util.format(
           'Compiling %s to %s',
           gutil.colors.magenta(paths.js),
-          gutil.colors.magenta(path.resolve(paths.build, out))
+          gutil.colors.magenta(path.resolve(paths.build, path.basename(paths.js)))
         )
       );
 
