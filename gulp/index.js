@@ -142,7 +142,8 @@ module.exports = {
 
       var bundler = browserify({ debug: true });
       bundler.transform(stringify({ extensions: ['.html'], minify: true }));
-      bundler.add(paths.js);
+      // Browserify can't handle purely relative paths, so resolve the path for them...
+      bundler.add(path.resolve(paths.base, paths.js));
       bundler.on('error', gutil.log.bind(gutil, 'Browserify Error'));
 
       return bundler.bundle()
