@@ -11,8 +11,8 @@ var gutil = require('gulp-util');
 var gif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var sourcemaps = require('gulp-sourcemaps');
-var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 var karma = require('karma');
 var pesto = require('pesto');
 var stylish = require('jshint-stylish');
@@ -129,38 +129,29 @@ module.exports = {
      * Bundles, compresses and produces sourcemaps for javascript.
      */
     gulp.task('js', function() {
-      var jsPath = path.resolve(paths.base, paths.js);
-
+      var out = options.jsOut || 'app.js';
       gutil.log(
         util.format(
           'Compiling %s to %s',
-          gutil.colors.magenta(jsPath),
-          gutil.colors.magenta(path.resolve(paths.build, options.jsOut || 'app.js'))
+          gutil.colors.magenta(paths.js),
+          gutil.colors.magenta(path.resolve(paths.build, out))
         )
       );
 
-      if (fs.existsSync(jsPath)) {
-        var bundler = browserify({
-          entries: [jsPath],
-          debug: true,
-          transform: stringify({ extensions: ['.html'], minify: true })
-        });
+      var bundler = browserify({
+        entries: paths.js,
+        debug: true,
+        transform: stringify({ extensions: ['.html'], minify: true })
+      });
 
-        return bundler.bundle()
-          .pipe(source(options.jsOut || 'app.js'))
-          .pipe(buffer())
-          .pipe(gif (options.sourcemap !== false, sourcemaps.init({loadMaps: true})))
-          .pipe(gif (options.compressJs !== false, uglify()))
-          .pipe(gif (options.sourcemap !== false, sourcemaps.write('./')))
-          .pipe(gulp.dest(paths.build));
-      } else {
-        gutil.log(
-          util.format(
-            'No js files found at %s to bundle',
-            gutil.colors.magenta(jsPath)
-          )
-        );
-      }
+      return bundler.bundle()
+        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+        .pipe(source(out))
+        .pipe(buffer())
+        .pipe(gif(options.compressJs !== false, uglify()))
+        .pipe(gif(options.sourcemap !== false, sourcemaps.init({ loadMaps: true })))
+        .pipe(gif(options.sourcemap !== false, sourcemaps.write('./')))
+        .pipe(gulp.dest(paths.build));
     });
 
     /**

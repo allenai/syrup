@@ -1,3 +1,4 @@
+'use strict';
 
 var path = require('path');
 var fs = require('fs');
@@ -24,9 +25,11 @@ describe('syrup.gulp.init()', function() {
   };
 
   // Remove any built files after each test is executed
-  afterEach(function(cb) {
+  afterEach(function(done) {
     var OUT = [ PROJECT_BUILD_DIR, ANOTHER_PROJECT_BUILD_DIR ];
-    del(OUT, cb);
+    del(OUT, function() {
+      done();
+    });
   });
 
   it('throws an exception without gulp', function() {
