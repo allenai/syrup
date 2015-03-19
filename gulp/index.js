@@ -197,7 +197,11 @@ module.exports = {
           .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
           .pipe(jshint.reporter(stylish));
       } else {
-        gutil.log(gutil.colors.yellow('Javascript will not be linted using jshint.'));
+        gutil.log(
+          gutil.colors.yellow(
+            'options.disableJsHint=true, so javascript will not be linted using jshint.'
+          )
+        );
       }
     });
 
