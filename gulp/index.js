@@ -78,6 +78,11 @@ module.exports = {
    *                                                      less or bundling javascript, don't break the
    *                                                      build -- just output the associatd error.
    *                                                      Defaults to false.
+   * @param {string}  [options.jsOut]                     Overrides the default filename for the
+   *                                                      bundled js file.  Defaults to the same
+   *                                                      filename as the js entry point (i.e. if
+   *                                                      paths.js is set to "app/app.js" the
+   *                                                      bundled file will be "build/app.js").
    * @param {object}  [configParameters]                  Optional map of configuration keys. If set each
    *                                                    	key is searched for in the html contents of the
    *                                                     	application and replaced with the corresponding
@@ -224,7 +229,7 @@ module.exports = {
      * Bundles, compresses and produces sourcemaps for javascript.
      */
     gulp.task('js', function() {
-      var fn = path.basename(paths.js);
+      var fn = options.jsOut || path.basename(paths.js);
       gutil.log(
         util.format(
           'Compiling %s to %s',
