@@ -45,20 +45,20 @@ module.exports = {
    * Registers default gulp tasks.
    *
    * @param {object}  gulp                          The gulp library.
-   * @param {object}  options                       Optional object definining configuration
+   * @param {object}  [options]                     Optional object definining configuration
    *                                                parameters.
-   * @param {object}  options.compressJs            If true javascript will be minified. Defaults
+   * @param {boolean} options.compressJs            If true javascript will be minified. Defaults
    *                                                to true. This causes the build to become
    *                                                significantly slower.
-   * @param {object}  options.sourceMaps            Enables javascript source maps. Defaults to
+   * @param {boolean} options.sourceMaps            Enables javascript source maps. Defaults to
    *                                                true.
-   * @param {object}  options.compressCss           If true styles will be compressed. Defaults to
+   * @param {boolean} options.compressCss           If true styles will be compressed. Defaults to
    *                                                true.
-   * @param {object}  configParameters              Optional map of configuration keys. If set each
+   * @param {object}  [configParameters]            Optional map of configuration keys. If set each
    *                                                key is searched for in the html contents of the
    *                                                application and replaced with the corresponding
    *                                                value.
-   * @param {object}  paths                         Optional object defining paths relevant to the
+   * @param {object}  [paths]                       Optional object defining paths relevant to the
    *                                                project. If not specified the defaults are used.
    * @param {string}  paths.base                    The base directory of your project where the
    *                                                gulpfile itself lives.  Defaults to the current
