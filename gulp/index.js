@@ -106,8 +106,8 @@ module.exports = {
         if (watch) {
           bundlerInstance = watchify(b);
           bundlerInstance.on('update', function() {
-            gutil.log(gutil.colors.cyan('Javascript update detected, rebundling...'));
-            gulp.start('html-js');
+            gutil.log(gutil.colors.yellow('Javascript update detected, rebundling...'));
+            gulp.start('html-js', 'set-config');
           });
         } else {
           bundlerInstance = b;
