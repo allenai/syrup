@@ -21,13 +21,18 @@ npm install syrup
  * @param {object}  gulp                          The gulp library.
  * @param {object}  [options]                     Optional object definining configuration
  *                                                parameters.
- * @param {boolean} options.compressJs            If true javascript will be minified. Defaults
+ * @param {boolean} [options.compressJs=true]     If true javascript will be minified. Defaults
  *                                                to true. This causes the build to become
  *                                                significantly slower.
- * @param {boolean} options.sourceMaps            Enables javascript source maps. Defaults to
+ * @param {boolean} [options.sourceMaps=true]     Enables javascript source maps. Defaults to
  *                                                true.
- * @param {boolean} options.compressCss           If true styles will be compressed. Defaults to
+ * @param {boolean} [options.compressCss=true]    If true styles will be compressed. Defaults to
  *                                                true.
+ * @param {boolean} [options.detectGlobals=false] Enables browserify global detection (and
+ *                                                inclusion).  This is necessary for certain
+ *                                                npm packages to work when bundled for front-end
+ *                                                inclusion.  Defaults to false.  Enabling this
+ *                                                may slow down your build.
  * @param {object}  [configParameters]            Optional map of configuration keys. If set each
  *                                                key is searched for in the html contents of the
  *                                                application and replaced with the corresponding

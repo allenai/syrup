@@ -1,13 +1,12 @@
 {
   "name": "syrup",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
   "author": {
     "name": "Sam Skjonsberg",
-    "email": "skoneberg@gmail.com",
-    "url": "http://codeviking.net"
+    "email": "sams@allenai.org"
   },
   "keywords": [
     "syrup",
