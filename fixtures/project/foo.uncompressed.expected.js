@@ -12,6 +12,7 @@ module.exports = {
   foo: b.bar,
 };
 
-},{"./bar":"/Users/skone/Projects/syrup/fixtures/project/src/bar.js"}]},{},["/Users/skone/Projects/syrup/fixtures/project/src/foo.js"]);
+},{"./bar":"/Users/skone/Projects/syrup/fixtures/project/src/bar.js"}]},{},["/Users/skone/Projects/syrup/fixtures/project/src/foo.js"])
+
 
 //# sourceMappingURL=foo.js.map

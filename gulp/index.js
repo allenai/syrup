@@ -137,7 +137,7 @@ module.exports = {
     var bundler = function(watch) {
       if (!bundlerInstance) {
         var b = browserify({
-          debug: options.sourceMaps,
+          debug: options.sourceMaps !== false,
           detectGlobals: options.detectGlobals,
           insertGlobals: options.insertGlobals,
           cache: {},
