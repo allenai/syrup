@@ -12,7 +12,7 @@ npm install syrup
 
 ## API
 
-### syrup.gulp.init(gulp, configParameters, configKeys, paths)
+### function(gulp, options, configParameters, paths)
 
 ```javascript
 /**
