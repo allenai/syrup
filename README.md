@@ -33,6 +33,13 @@ npm install syrup
  *                                                npm packages to work when bundled for front-end
  *                                                inclusion.  Defaults to false.  Enabling this
  *                                                may slow down your build.
+ * @param {boolean} [options.insertGlobals=false] Enables automatic insertion of node globals
+ *                                                when preparing a javascript bundler.  Faster
+ *                                                alternative to detectGlobals but causes the
+ *                                                javascript file to include an extra 1000 lines
+ *                                                of nodejs globals with every build.  Defaults
+ *                                                to false.
+ * @param {boolean} [options.disableJsHint=false] Disables jshint.  Defaults to false.
  * @param {object}  [configParameters]            Optional map of configuration keys. If set each
  *                                                key is searched for in the html contents of the
  *                                                application and replaced with the corresponding
