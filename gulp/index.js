@@ -107,7 +107,7 @@ module.exports = {
           bundlerInstance = watchify(b);
           bundlerInstance.on('update', function() {
             gutil.log(gutil.colors.yellow('Javascript update detected, rebundling...'));
-            gulp.start('html-js', 'set-config');
+            gulp.start('html-js');
           });
         } else {
           bundlerInstance = b;
@@ -122,11 +122,25 @@ module.exports = {
 
     // Helper method for copying html, see 'html-only' and 'html' tasks.
     var copyHtml = function() {
-      gutil.log(util.format('Copying %s to %s',
-          gutil.colors.magenta(paths.html), gutil.colors.magenta(paths.build)));
+      gutil.log(
+        util.format(
+          'Copying %s to %s',
+          gutil.colors.magenta(paths.html),
+          gutil.colors.magenta(paths.build)
+        )
+      );
+      var hasConfig = typeof configParameters === 'object';
+      if (hasConfig) {
+        var configKeys = Object.getOwnPropertyNames(configParameters || {});
+        var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g')
+      }
+      var replaceConfigKeys = replace(reConfigKeys, function(key) {
+        return configParameters[key] || '';
+      });
       return gulp.src(paths.html)
-          .pipe(cb(paths.build))
-          .pipe(gulp.dest(paths.build));
+        .pipe(cb(paths.build))
+        .pipe(gif(hasConfig, replaceConfigKeys))
+        .pipe(gulp.dest(paths.build));
     };
 
     /**
@@ -214,7 +228,7 @@ module.exports = {
         )
       );
       return gulp.src(paths.assets)
-          .pipe(gulp.dest(dest));
+        .pipe(gulp.dest(dest));
     });
 
     /**
@@ -232,30 +246,13 @@ module.exports = {
     gulp.task('html', [ 'js', 'less', 'assets'], copyHtml);
 
     /**
-     * Sets configuration data.
-     */
-    gulp.task('set-config', ['html'], function() {
-      if (configParameters) {
-        var configKeys = Object.getOwnPropertyNames(configParameters || {});
-        var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g')
-        return gulp.src(path.resolve(paths.build, path.basename(paths.html)))
-          .pipe(replace(reConfigKeys, function(key) {
-            return configParameters[key] || '';
-          }))
-          .pipe(gulp.dest(paths.build));
-      } else {
-        gutil.log(gutil.colors.yellow('No configuration parameters provided.'));
-      }
-    });
-
-    /**
      * Watches specific files and rebuilds only the changed component(s).
      */
     gulp.task('watch', function(cb) {
       bundler(true);
-      gulp.watch(paths.allLess, ['html-less', 'set-config']);
-      gulp.watch(paths.assets, ['html-assets', 'set-config']);
-      gulp.watch(paths.html, ['html-only', 'set-config']);
+      gulp.watch(paths.allLess, ['html-less']);
+      gulp.watch(paths.assets, ['html-assets']);
+      gulp.watch(paths.html, ['html-only']);
       gulp.start('build', cb);
     });
 
@@ -263,7 +260,7 @@ module.exports = {
      * Combined build task. This bundles up all required UI resources.
      */
     gulp.task('build', ['clean'], function() {
-      return gulp.start(['assets', 'jslint', 'js', 'less', 'html', 'set-config']);
+      return gulp.start(['assets', 'jslint', 'js', 'less', 'html']);
     });
 
     /**

@@ -53,7 +53,7 @@ describe('syrup.gulp.init()', function() {
 
   it('applies configuration parameters', function(done) {
     initDefaultProject();
-    gulp.start('set-config', function() {
+    gulp.start('html', function() {
       assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html')));
       var html = fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html')).toString();
       assert(html.indexOf('SOMEONE SET US UP THE BOMB') !== -1);
