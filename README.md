@@ -22,7 +22,8 @@ npm install syrup
  * @param {object}  options                       Optional object definining configuration
  *                                                parameters.
  * @param {object}  options.compressJs            If true javascript will be minified. Defaults
- *                                                to true.
+ *                                                to true. This causes the build to become
+ *                                                significantly slower.
  * @param {object}  options.sourceMaps            Enables javascript source maps. Defaults to
  *                                                true.
  * @param {object}  options.compressCss           If true styles will be compressed. Defaults to
@@ -34,17 +35,26 @@ npm install syrup
  * @param {object}  paths                         Optional object defining paths relevant to the
  *                                                project. If not specified the defaults are used.
  * @param {string}  paths.base                    The base directory of your project where the
- *                                                gulpfile itself lives.  Defaults to
- *                                                process.cwd().
- * @param {string}  paths.html                    Path to the project's HTML files.
- * @param {string}  paths.jshint                  Path to javascript files which should be linted
- *                                                using jshint.
- * @param {string}  paths.js                      Path to javascript files to be bundled using
- *                                                browserify.
- * @param {string}  paths.less                    Path to the project's less files.
- * @param {string}  paths.assets                  Path to the project's assets.
+ *                                                gulpfile itself lives.  Defaults to the current
+ *                                                working directory.
+ * @param {string}  paths.html                    Path to the project's HTML files which should
+ *                                                be copied into the output directory.
+ * @param {string}  paths.jshint                  Path to the javascript files which should be
+ *                                                linted using jshint.
+ * @param {string}  paths.js                      Javascript entry point. It and all dependencies
+ *                                                loaded via require() will be bundled into
+ *                                                a single javascript file of the same name.
+ * @param {string}  paths.allLess                 Path to all less files which will be watched
+ *                                                for changes and cause less re-compilation as
+ *                                                changes occur.
+ * @param {string}  paths.less                    The less entry-point.  The less file and it's
+ *                                                dependencies (specified using @import) will
+ *                                                be compiled into a single static css file of
+ *                                                the same name.
+ * @param {string}  paths.assets                  Path to the project's static assets (images,
+ *                                                fonts, etc).
  * @param {string}  paths.build                   Path to the project's build directory where the
- *                                                final output should be placed.
+ *                                                output should be placed.
  * @returns {undefined}
  */
 syrup.gulp.init(gulp, options, configParameters, paths)
@@ -62,7 +72,6 @@ The default paths are as follows.
   js: 'app/app.js',
   assets: 'app/assets/**/*',
   build: 'build'
-};tegrationTests: 'integration-tests/**/*-it.js'
 }
 ```
 
