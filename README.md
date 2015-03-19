@@ -18,55 +18,59 @@ npm install syrup
 /**
  * Registers default gulp tasks.
  *
- * @param {object}  gulp                          The gulp library.
- * @param {object}  [options]                     Optional object definining configuration
- *                                                parameters.
- * @param {boolean} [options.compressJs=true]     If true javascript will be minified. Defaults
- *                                                to true. This causes the build to become
- *                                                significantly slower.
- * @param {boolean} [options.sourceMaps=true]     Enables javascript source maps. Defaults to
- *                                                true.
- * @param {boolean} [options.compressCss=true]    If true styles will be compressed. Defaults to
- *                                                true.
- * @param {boolean} [options.detectGlobals=false] Enables browserify global detection (and
- *                                                inclusion).  This is necessary for certain
- *                                                npm packages to work when bundled for front-end
- *                                                inclusion.  Defaults to false.  Enabling this
- *                                                may slow down your build.
- * @param {boolean} [options.insertGlobals=false] Enables automatic insertion of node globals
- *                                                when preparing a javascript bundler.  Faster
- *                                                alternative to detectGlobals but causes the
- *                                                javascript file to include an extra 1000 lines
- *                                                of nodejs globals with every build.  Defaults
- *                                                to false.
- * @param {boolean} [options.disableJsHint=false] Disables jshint.  Defaults to false.
- * @param {object}  [configParameters]            Optional map of configuration keys. If set each
- *                                                key is searched for in the html contents of the
- *                                                application and replaced with the corresponding
- *                                                value.
- * @param {object}  [paths]                       Optional object defining paths relevant to the
- *                                                project. If not specified the defaults are used.
- * @param {string}  paths.base                    The base directory of your project where the
- *                                                gulpfile itself lives.  Defaults to the current
- *                                                working directory.
- * @param {string}  paths.html                    Path to the project's HTML files which should
- *                                                be copied into the output directory.
- * @param {string}  paths.jshint                  Path to the javascript files which should be
- *                                                linted using jshint.
- * @param {string}  paths.js                      Javascript entry point. It and all dependencies
- *                                                loaded via require() will be bundled into
- *                                                a single javascript file of the same name.
- * @param {string}  paths.allLess                 Path to all less files which will be watched
- *                                                for changes and cause less re-compilation as
- *                                                changes occur.
- * @param {string}  paths.less                    The less entry-point.  The less file and it's
- *                                                dependencies (specified using @import) will
- *                                                be compiled into a single static css file of
- *                                                the same name.
- * @param {string}  paths.assets                  Path to the project's static assets (images,
- *                                                fonts, etc).
- * @param {string}  paths.build                   Path to the project's build directory where the
- *                                                output should be placed.
+ * @param {object}  gulp                                The gulp library.
+ * @param {object}  [options]                           Optional object definining configuration
+ *                                                		  parameters.
+ * @param {boolean} [options.compressJs=true]           If true javascript will be minified. Defaults
+ *                                                		  to true. This causes the build to become
+ *                                                			significantly slower.
+ * @param {boolean} [options.sourceMaps=true]           Enables javascript source maps. Defaults to
+ *                                                    	true.
+ * @param {boolean} [options.compressCss=true]          If true styles will be compressed. Defaults to
+ *                                                		  true.
+ * @param {boolean} [options.detectGlobals=false]       Enables browserify global detection (and
+ *                                                		  inclusion).  This is necessary for certain
+ *                                                			npm packages to work when bundled for front-end
+ *                                                			inclusion.  Defaults to false.  Enabling this
+ *                                                			may slow down your build.
+ * @param {boolean} [options.insertGlobals=false]       Enables automatic insertion of node globals
+ *                                                	   	when preparing a javascript bundler.  Faster
+ *                                                			alternative to detectGlobals but causes the
+ *                                                			javascript file to include an extra 1000 lines
+ *                                                			of nodejs globals with every build.  Defaults
+ *                                                			to false.
+ * @param {boolean} [options.disableJsHint=false]       Disables jshint.  Defaults to false.
+ * @param {boolean} [options.handleExceptions=false]    If an exception is encountered while compiling
+ *                                                      less or bundling javascript, don't break the
+ *                                                      build -- just output the associatd error.
+ *                                                      Defaults to false.
+ * @param {object}  [configParameters]                  Optional map of configuration keys. If set each
+ *                                                    	key is searched for in the html contents of the
+ *                                                     	application and replaced with the corresponding
+ *                                                      value.
+ * @param {object}  [paths]                             Optional object defining paths relevant to the
+ *                                                    	project. If not specified the defaults are used.
+ * @param {string}  paths.base                          The base directory of your project where the
+ *                                                    	gulpfile itself lives.  Defaults to the current
+ *                                                     	working directory.
+ * @param {string}  paths.html                          Path to the project's HTML files which should
+ *                                                    	be copied into the output directory.
+ * @param {string}  paths.jshint                        Path to the javascript files which should be
+ *                                                    	linted using jshint.
+ * @param {string}  paths.js                            Javascript entry point. It and all dependencies
+ *                                                    	loaded via require() will be bundled into
+ *                                                     	a single javascript file of the same name.
+ * @param {string}  paths.allLess                       Path to all less files which will be watched
+ *                                                      for changes and cause less re-compilation as
+ *                                                      changes occur.
+ * @param {string}  paths.less                          The less entry-point.  The less file and it's
+ *                                                      dependencies (specified using @import) will
+ *                                                      be compiled into a single static css file of
+ *                                                      the same name.
+ * @param {string}  paths.assets                        Path to the project's static assets (images,
+ *                                                      fonts, etc).
+ * @param {string}  paths.build                         Path to the project's build directory where the
+ *                                                      output should be placed.
  * @returns {undefined}
  */
 syrup.gulp.init(gulp, options, configParameters, paths)
