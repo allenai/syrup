@@ -220,7 +220,6 @@ describe('syrup.gulp.init()', function() {
     })
   });
 
-
   it('runs all tasks via the build task', function() {
     // This type of testing relies upon gulps implementation and is, admittedly a bit unstable.
     // It's the easiest way to inspect these dependencies chains without writing a huge slop of

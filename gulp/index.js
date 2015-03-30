@@ -142,7 +142,7 @@ module.exports = {
           insertGlobals: options.insertGlobals,
           cache: {},
           packageCache: {},
-          fullPaths: true
+          fullPaths: true /* Required for source maps */
         });
         if (watch) {
           bundlerInstance = watchify(b);
@@ -171,10 +171,8 @@ module.exports = {
         )
       );
       var hasConfig = typeof configParameters === 'object';
-      if (hasConfig) {
-        var configKeys = Object.getOwnPropertyNames(configParameters || {});
-        var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g')
-      }
+      var configKeys = Object.getOwnPropertyNames(configParameters || {});
+      var reConfigKeys = new RegExp('(?:' + configKeys.join('|') + ')', 'g');
       var replaceConfigKeys = replace(reConfigKeys, function(key) {
         return configParameters[key] || '';
       });
