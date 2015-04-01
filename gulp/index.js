@@ -310,7 +310,7 @@ module.exports = {
      * Combined build task. This bundles up all required UI resources.
      */
     gulp.task('build', ['clean'], function(cb) {
-      gulp.start(['assets', 'jslint', 'js', 'less', 'html'], cb);
+      gulp.start('assets', 'jslint', 'js', 'less', 'html', cb);
     });
 
     /**
