@@ -23,6 +23,7 @@ var watchify = require('watchify');
 var merge = require('../merge');
 var plumber = require('gulp-plumber');
 var defaultPaths = require('./default-paths');
+var runSequence = require('run-sequence');
 
 /**
  * @private
@@ -310,7 +311,11 @@ module.exports = {
      * Combined build task. This bundles up all required UI resources.
      */
     gulp.task('build', ['clean'], function(cb) {
-      gulp.start('assets', 'jslint', 'js', 'less', 'html', cb);
+      runSequence(
+        'clean',
+        ['assets', 'jslint', 'js', 'less', 'html'],
+        cb
+      );
     });
 
     /**

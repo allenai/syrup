@@ -1,6 +1,6 @@
 {
   "name": "syrup",
-  "version": "0.0.55",
+  "version": "0.0.56",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
@@ -41,6 +41,7 @@
     "jshint-stylish": "1.0.0",
     "minimist": "1.1.0",
     "q": "1.0.1",
+    "run-sequence": "1.0.2",
     "stringify": "3.1.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
