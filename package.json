@@ -1,6 +1,6 @@
 {
   "name": "syrup",
-  "version": "0.0.57",
+  "version": "0.1.0",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
@@ -36,7 +36,7 @@
     "gulp-plumber": "1.0.0",
     "gulp-replace": "0.5.3",
     "gulp-sourcemaps": "1.5.1",
-    "gulp-uglify": "1.0.1",
+    "gulp-uglify": "1.1.0",
     "gulp-util": "3.0.1",
     "jshint-stylish": "1.0.0",
     "minimist": "1.1.0",

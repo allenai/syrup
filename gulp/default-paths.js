@@ -9,5 +9,5 @@
    jshint: 'app/**/*.js',
    js: 'app/app.js',
    assets: 'app/assets/**/*',
-   build: 'build'
+   build: 'build/'
  };

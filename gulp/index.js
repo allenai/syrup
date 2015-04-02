@@ -1,7 +1,6 @@
 'use strict';
 
 var cb = require('gulp-cache-breaker');
-var fs = require('fs');
 var autoprefixer = require('gulp-autoprefixer');
 var browserify = require('browserify');
 var uglify = require('gulp-uglify');
@@ -16,7 +15,6 @@ var buffer = require('vinyl-buffer');
 var stylish = require('jshint-stylish');
 var util = require('util');
 var path = require('path');
-var Buffer = require('buffer').Buffer;
 var replace = require('gulp-replace');
 var stringify = require('stringify');
 var watchify = require('watchify');
@@ -34,20 +32,47 @@ var runSequence = require('run-sequence');
  * @returns {string} The top most directory found.  For instance, returns "asdf" if given
  *                   "/foo/bar/asdf".
  */
-var topDirectory = function(p) {
+function topDirectory(p) {
   return p.split(path.sep).filter(function(part) {
     return part.indexOf('*') === -1;
   }).pop();
-};
+}
 
 /**
  * @private
  * Outputs error messages and stops the stream.
  */
-var logErrorAndKillStream = function(error) {
+function logErrorAndKillStream(error) {
   gutil.log(gutil.colors.red('Error:'), error.toString());
   this.emit('end');
-};
+}
+
+/**
+ * @private
+ * Returns the time difference between start and now nicely formatted for output.
+ */
+function formattedTimeDiff(start) {
+  var diff = Date.now() - start;
+  if (diff < 1000) {
+    diff = diff + 'ms';
+  } else {
+    diff = diff / 1000;
+    if (diff > 60) {
+      diff = diff / 60 + 'm';
+    } else {
+      diff += 's';
+    }
+  }
+  return gutil.colors.yellow(diff);
+}
+
+/**
+ * @private
+ * Logs a message indicating that the build is complete.
+ */
+function outputBuildCompleteMessage(start) {
+  gutil.log(gutil.colors.green('build finished successfully in ') + formattedTimeDiff(start));
+}
 
 module.exports = {
   /**
@@ -146,10 +171,13 @@ module.exports = {
           fullPaths: true /* Required for source maps */
         });
         if (watch) {
-          bundlerInstance = watchify(b);
+          bundlerInstance = watchify(b, { delay: 1 });
           bundlerInstance.on('update', function() {
-            gutil.log(gutil.colors.yellow('Javascript update detected, rebundling...'));
-            gulp.start('html-js');
+            var start = Date.now();
+            gutil.log(gutil.colors.yellow('javascript change detected'));
+            gulp.start('html-js', function() {
+              outputBuildCompleteMessage(start);
+            });
           });
         } else {
           bundlerInstance = b;
@@ -166,7 +194,7 @@ module.exports = {
     var copyHtml = function() {
       gutil.log(
         util.format(
-          'Copying %s to %s',
+          'copying html: %s to %s',
           gutil.colors.magenta(paths.html),
           gutil.colors.magenta(paths.build)
         )
@@ -187,8 +215,7 @@ module.exports = {
      * Removes all build artifacts.
      */
     gulp.task('clean', function(cb) {
-      gutil.log(util.format('Removing artifacts from %s',
-          gutil.colors.magenta(paths.build)));
+      gutil.log(util.format('cleaning: %s', gutil.colors.magenta(paths.build)));
       var targets = [ paths.build ];
       return del(targets, { force: true }, cb);
     });
@@ -197,7 +224,7 @@ module.exports = {
      * Compiles less files to css.
      */
     gulp.task('less', function() {
-      gutil.log(util.format('Compiling %s to %s',
+      gutil.log(util.format('compiling less to css: %s to %s',
           gutil.colors.magenta(paths.less), gutil.colors.magenta(paths.build + paths.less)));
       return gulp.src(paths.less)
         .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
@@ -211,7 +238,7 @@ module.exports = {
      */
     gulp.task('jslint', function() {
       if (!options.disableJsHint) {
-        gutil.log(util.format('Linting %s', gutil.colors.magenta(paths.jshint)));
+        gutil.log(util.format('linting javascript: %s', gutil.colors.magenta(paths.jshint)));
         return gulp.src(paths.jshint)
           .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
           .pipe(jshint.reporter(stylish));
@@ -231,7 +258,7 @@ module.exports = {
       var fn = options.jsOut || path.basename(paths.js);
       gutil.log(
         util.format(
-          'Compiling %s to %s',
+          'bundling javascript: %s to %s',
           gutil.colors.magenta(paths.js),
           gutil.colors.magenta(path.resolve(paths.build, fn))
         )
@@ -241,7 +268,7 @@ module.exports = {
         .pipe(source(fn))
         .pipe(buffer())
         .pipe(gif(options.sourceMaps !== false, sourcemaps.init({ loadMaps: true })))
-        .pipe(gif(options.compressJs !== false, uglify()))
+        .pipe(gif(options.compressJs !== false, uglify({ compress: { 'drop_debugger': false } })))
         .pipe(gif(options.sourceMaps !== false, sourcemaps.write('./')))
         .pipe(gulp.dest(paths.build));
     });
@@ -272,7 +299,7 @@ module.exports = {
       var dest = paths.build + path.sep + assetDir;
       gutil.log(
         util.format(
-          'Copying %s to %s',
+          'copying static assets: %s to %s',
           gutil.colors.magenta(paths.assets),
           gutil.colors.magenta(dest)
         )
@@ -298,23 +325,48 @@ module.exports = {
     /**
      * Watches specific files and rebuilds only the changed component(s).
      */
-    gulp.task('watch', function(cb) {
+    gulp.task('watch', function() {
       options.handleExceptions = true;
       bundler(true);
-      gulp.watch(paths.allLess, ['html-less']);
-      gulp.watch(paths.assets, ['html-assets']);
-      gulp.watch(paths.html, ['html-only']);
-      gulp.start('build', cb);
+      gulp.start('build', function() {
+        gulp.watch(paths.allLess, function() {
+          var start = Date.now();
+          gutil.log(gutil.colors.yellow('less change detected'));
+          gulp.start('html-less', function() {
+            outputBuildCompleteMessage(start);
+          });
+        });
+
+        gulp.watch(paths.assets, function() {
+          var start = Date.now();
+          gutil.log(gutil.colors.yellow('asset change detected'));
+          gulp.start('html-assets', function() {
+            outputBuildCompleteMessage(start);
+          });
+        });
+
+        gulp.watch(paths.html, function() {
+          var start = Date.now();
+          gutil.log(gutil.colors.yellow('html change detected'));
+          gulp.start('html-only', function() {
+            outputBuildCompleteMessage(start);
+          });
+        });
+      });
     });
 
     /**
      * Combined build task. This bundles up all required UI resources.
      */
-    gulp.task('build', ['clean'], function(cb) {
+    gulp.task('build', function(cb) {
+      var start = Date.now();
       runSequence(
         'clean',
         ['assets', 'jslint', 'js', 'less', 'html'],
-        cb
+        function() {
+          cb();
+          outputBuildCompleteMessage(start);
+        }
       );
     });
 

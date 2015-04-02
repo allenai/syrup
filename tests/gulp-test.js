@@ -220,18 +220,6 @@ describe('syrup.gulp.init()', function() {
     })
   });
 
-  it('runs all tasks via the build task', function() {
-    // This type of testing relies upon gulps implementation and is, admittedly a bit unstable.
-    // It's the easiest way to inspect these dependencies chains without writing a huge slop of
-    // test code to verify *every* step (which we already did independently above)
-    assert(typeof gulp.tasks['build'] === 'object');
-    assert.deepEqual(
-      gulp.tasks['build'].dep,
-      ['clean']
-    );
-  });
-
-
   it('has a default task which runs the build task', function() {
     assert(typeof gulp.tasks['default'] === 'object');
     assert.deepEqual(

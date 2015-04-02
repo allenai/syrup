@@ -1,0 +1,24 @@
+{
+  "name": "Flapjack",
+  "version": "1.0.0",
+  "description": "A simple test application for syrup.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp build",
+    "watch": "gulp watch"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "devDependencies": {
+    "babelify": "5.0.4",
+    "express": "4.12.3",
+    "gulp-util": "3.0.4",
+    "morgan": "1.5.2",
+    "react": "0.13.1",
+    "syrup": "^0.1.0"
+  }
+}
