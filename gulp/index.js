@@ -71,7 +71,7 @@ function formattedTimeDiff(start) {
  * Logs a message indicating that the build is complete.
  */
 function outputBuildCompleteMessage(start) {
-  gutil.log(gutil.colors.green('build finished successfully in ') + formattedTimeDiff(start));
+  gutil.log(gutil.colors.green('Build finished successfully in ') + formattedTimeDiff(start));
 }
 
 module.exports = {
@@ -181,7 +181,7 @@ module.exports = {
           bundlerInstance = watchify(b, { delay: 1 });
           bundlerInstance.on('update', function() {
             var start = Date.now();
-            gutil.log(gutil.colors.yellow('javascript change detected'));
+            gutil.log(gutil.colors.yellow('Javascript change detected'));
             gulp.start('html-js', function() {
               outputBuildCompleteMessage(start);
             });
@@ -201,7 +201,7 @@ module.exports = {
     var copyHtml = function() {
       gutil.log(
         util.format(
-          'copying html: %s to %s',
+          'Copying html: %s to %s',
           gutil.colors.magenta(paths.html),
           gutil.colors.magenta(paths.build)
         )
@@ -222,7 +222,7 @@ module.exports = {
      * Removes all build artifacts.
      */
     gulp.task('clean', function(cb) {
-      gutil.log(util.format('cleaning: %s', gutil.colors.magenta(paths.build)));
+      gutil.log(util.format('Cleaning: %s', gutil.colors.magenta(paths.build)));
       var targets = [ paths.build ];
       return del(targets, { force: true }, cb);
     });
@@ -245,14 +245,14 @@ module.exports = {
      */
     gulp.task('jslint', function() {
       if (!options.disableJsHint) {
-        gutil.log(util.format('linting javascript: %s', gutil.colors.magenta(paths.jshint)));
+        gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jshint)));
         return gulp.src(paths.jshint)
           .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
           .pipe(jshint.reporter(stylish));
       } else {
         gutil.log(
           gutil.colors.yellow(
-            'options.disableJsHint=true, so javascript will not be linted using jshint.'
+            'Javascript linting skipped'
           )
         );
       }
@@ -265,9 +265,9 @@ module.exports = {
       var fn = options.jsOut || path.basename(paths.js);
       gutil.log(
         util.format(
-          'bundling javascript: %s to %s',
+          'Bundling javascript: %s to %s',
           gutil.colors.magenta(paths.js),
-          gutil.colors.magenta(path.resolve(paths.build, fn))
+          gutil.colors.magenta(path.relative(process.cwd(), path.resolve(paths.build, fn)))
         )
       );
       return gif(options.handleExceptions, plumber(logErrorAndKillStream))
@@ -288,7 +288,7 @@ module.exports = {
      */
     gulp.task('assets', ['user-assets'], function() {
       var assetDir = topDirectory(paths.assets);
-      var dest = paths.build + path.sep + assetDir;
+      var dest = path.relative(process.cwd(), path.resolve(paths.build, assetDir));
       var iconAndFontBase = path.resolve(__dirname, '..');
       var iconsAndFontPaths = [
         path.resolve(iconAndFontBase, 'fonts', '**', '*'),
@@ -303,10 +303,10 @@ module.exports = {
      */
    gulp.task('user-assets', function() {
       var assetDir = topDirectory(paths.assets);
-      var dest = paths.build + path.sep + assetDir;
+      var dest = path.relative(process.cwd(), path.resolve(paths.build, assetDir));
       gutil.log(
         util.format(
-          'copying static assets: %s to %s',
+          'Copying static assets: %s to %s',
           gutil.colors.magenta(paths.assets),
           gutil.colors.magenta(dest)
         )
@@ -338,7 +338,7 @@ module.exports = {
       gulp.start('build', function() {
         gulp.watch(paths.allLess, function() {
           var start = Date.now();
-          gutil.log(gutil.colors.yellow('less change detected'));
+          gutil.log(gutil.colors.yellow('Less change detected'));
           gulp.start('html-less', function() {
             outputBuildCompleteMessage(start);
           });
@@ -346,7 +346,7 @@ module.exports = {
 
         gulp.watch(paths.assets, function() {
           var start = Date.now();
-          gutil.log(gutil.colors.yellow('asset change detected'));
+          gutil.log(gutil.colors.yellow('Asset change detected'));
           gulp.start('html-assets', function() {
             outputBuildCompleteMessage(start);
           });
@@ -354,7 +354,7 @@ module.exports = {
 
         gulp.watch(paths.html, function() {
           var start = Date.now();
-          gutil.log(gutil.colors.yellow('html change detected'));
+          gutil.log(gutil.colors.yellow('HTML change detected'));
           gulp.start('html-only', function() {
             outputBuildCompleteMessage(start);
           });

@@ -1,7 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
-var syrup = require('syrup');
+var syrup = require('../');
 var express = require('express');
 var morgan = require('morgan');
 
