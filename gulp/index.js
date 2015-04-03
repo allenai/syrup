@@ -231,8 +231,13 @@ module.exports = {
      * Compiles less files to css.
      */
     gulp.task('less', function() {
-      gutil.log(util.format('compiling less to css: %s to %s',
-          gutil.colors.magenta(paths.less), gutil.colors.magenta(paths.build + paths.less)));
+      gutil.log(
+        util.format(
+          'compiling less to css: %s to %s',
+          gutil.colors.magenta(paths.less),
+          gutil.colors.magenta(path.relative(process.cwd(), path.resolve(paths.build, paths.less)))
+        )
+      );
       return gulp.src(paths.less)
         .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
         .pipe(less({ compress: options.compressCss !== false }))
@@ -251,7 +256,7 @@ module.exports = {
           .pipe(jshint.reporter(stylish));
       } else {
         gutil.log(
-          gutil.colors.yellow(
+          gutil.colors.gray(
             'Javascript linting skipped'
           )
         );
