@@ -22,6 +22,7 @@ var merge = require('../merge');
 var plumber = require('gulp-plumber');
 var defaultPaths = require('./default-paths');
 var runSequence = require('run-sequence');
+var babelify = require('babelify');
 
 /**
  * @private
@@ -190,6 +191,7 @@ module.exports = {
           bundlerInstance = b;
         }
         bundlerInstance.transform(stringify({ extensions: ['.html'], minify: true }));
+        bundlerInstance.transform(babelify);
         // Browserify can't handle purely relative paths, so resolve the path for them...
         bundlerInstance.add(path.resolve(paths.base, paths.js));
         bundlerInstance.on('error', gutil.log.bind(gutil, 'Browserify Error'));

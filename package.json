@@ -1,6 +1,6 @@
 {
   "name": "syrup",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
@@ -24,6 +24,7 @@
     "mocha": "2.0.1"
   },
   "dependencies": {
+    "babelify": "6.0.1",
     "browserify": "9.0.3",
     "del": "0.1.3",
     "express": "4.10.1",
