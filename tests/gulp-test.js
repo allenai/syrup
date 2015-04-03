@@ -24,7 +24,7 @@ describe('syrup.gulp.init()', function() {
     );
   };
 
-  // Remove any built files after each test is executed
+  //Remove any built files after each test is executed
   afterEach(function(done) {
     var OUT = [ PROJECT_BUILD_DIR, ANOTHER_PROJECT_BUILD_DIR ];
     del(OUT, function() {
@@ -99,7 +99,7 @@ describe('syrup.gulp.init()', function() {
       assert(
         fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html'))
           .toString()
-          .indexOf('foo.js?cb=ae7456af3573460f1c514dd20ac0ac1322f1afe0') !== -1
+          .indexOf('foo.js?cb=33e954aae8dcf7853cac302409b6d597c9777aa6') !== -1
       );
       done();
     });

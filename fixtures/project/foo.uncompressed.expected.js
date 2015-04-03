@@ -5,7 +5,7 @@ module.exports = {
   bar: true
 };
 
-},{}],"/Users/skone/Projects/syrup/fixtures/project/src/foo.js":[function(require,module,exports){
+},{}],"/Users/skone/Projects/syrup/fixtures/project/src/foo.jsx":[function(require,module,exports){
 'use strict';
 
 var b = require('./bar');
@@ -15,7 +15,7 @@ if (b) var a = 'foobar';
 module.exports = {
   foo: b.bar };
 
-},{"./bar":"/Users/skone/Projects/syrup/fixtures/project/src/bar.js"}]},{},["/Users/skone/Projects/syrup/fixtures/project/src/foo.js"])
+},{"./bar":"/Users/skone/Projects/syrup/fixtures/project/src/bar.js"}]},{},["/Users/skone/Projects/syrup/fixtures/project/src/foo.jsx"])
 
 
 //# sourceMappingURL=foo.js.map

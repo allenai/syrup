@@ -89,10 +89,10 @@ module.exports = {
    *                                                    	true.
    * @param {boolean} [options.compressCss=true]          If true styles will be compressed. Defaults to
    *                                                		  true.
-   * @param {boolean} [options.detectGlobals=false]       Enables browserify global detection (and
+   * @param {boolean} [options.detectGlobals=true]        Enables browserify global detection (and
    *                                                		  inclusion).  This is necessary for certain
    *                                                			npm packages to work when bundled for front-end
-   *                                                			inclusion.  Defaults to false.  Enabling this
+   *                                                			inclusion.  Defaults to true.  Enabling this
    *                                                			may slow down your build.
    * @param {boolean} [options.insertGlobals=false]       Enables automatic insertion of node globals
    *                                                	   	when preparing a javascript bundler.  Faster
@@ -166,13 +166,19 @@ module.exports = {
       paths.build = gutil.env.builddir || gutil.env.target;
     }
 
+    // Finally, if NODE_BUILD_DIR is set, override build yet
+    // TODO: Document!
+    if (process.env.NODE_BUILD_DIR) {
+      paths.build = process.env.NODE_BUILD_DIR;
+    }
+
     // Helper function to get browserify bundler used both by the 'js' task and the 'watch' task
     var bundlerInstance;
     var bundler = function(watch) {
       if (!bundlerInstance) {
         var b = browserify({
           debug: options.sourceMaps !== false,
-          detectGlobals: options.detectGlobals,
+          detectGlobals: (options.detectGlobals === undefined ? true : options.detectGlobals),
           insertGlobals: options.insertGlobals,
           cache: {},
           packageCache: {},
@@ -269,7 +275,7 @@ module.exports = {
      * Bundles, compresses and produces sourcemaps for javascript.
      */
     gulp.task('js', function() {
-      var fn = options.jsOut || path.basename(paths.js);
+      var fn = options.jsOut || path.basename(paths.js).replace(/\.jsx$/, '.js');
       gutil.log(
         util.format(
           'Bundling javascript: %s to %s',
