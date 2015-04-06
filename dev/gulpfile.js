@@ -6,18 +6,7 @@ var syrup = require('../');
 var express = require('express');
 var morgan = require('morgan');
 
-syrup.gulp.init(
-  gulp,
-  {
-    detectGlobals: true,  // Required for React
-    jsOut: 'main.js'      // We don't want the compiled JSX to compile to "main.jsx", so override
-                          // it here to "main.js"
-  },
-  undefined,
-  {
-    js: 'app/main.jsx'
-  }
-);
+syrup.gulp.init(gulp);
 
 gulp.task('start-server', function(cb) {
   var server = express();
