@@ -7,7 +7,7 @@
    allLess: 'app/**/*.less',
    less: 'app/main.less',
    jshint: ['app/**/*.js', 'app/**/*.jsx'],
-   js: 'app/app.js',
+   js: 'app/app.jsx',
    assets: 'app/assets/**/*',
    build: 'build/'
  };

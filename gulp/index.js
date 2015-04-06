@@ -23,6 +23,7 @@ var plumber = require('gulp-plumber');
 var defaultPaths = require('./default-paths');
 var runSequence = require('run-sequence');
 var babelify = require('babelify');
+var react = require('gulp-react');
 
 /**
  * @private
@@ -260,6 +261,7 @@ module.exports = {
       if (!options.disableJsHint) {
         gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jshint)));
         return gulp.src(paths.jshint)
+          .pipe(react())
           .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
           .pipe(jshint.reporter(stylish));
       } else {
