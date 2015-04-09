@@ -53,6 +53,8 @@ npm install syrup
  * @param {boolean} [options.enableStringify=false]     Optionally enable stringify, a browserify
  *                                                      transform that allows HTML files to be
  *                                                      included via require.
+ * @param {number}  [options.port=4000]                 Optional port for the HTTP server started
+ *                                                      via the serve task.  Defaults to 4000.
  * @param {object}  [configParameters]                  Optional map of configuration keys. If
  *                                                      set each key is searched for in the built
  *                                                      HTML and replaced with the corresponding

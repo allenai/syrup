@@ -24,6 +24,7 @@ var defaultPaths = require('./default-paths');
 var runSequence = require('run-sequence');
 var babelify = require('babelify');
 var react = require('gulp-react');
+var express = require('express');
 
 /**
  * @private
@@ -115,6 +116,8 @@ module.exports = {
    * @param {boolean} [options.enableStringify=false]     Optionally enable stringify, a browserify
    *                                                      transform that allows HTML files to be
    *                                                      included via require.
+   * @param {number}  [options.port=4000]                 Optional port for the HTTP server started
+   *                                                      via the serve task.  Defaults to 4000.
    * @param {object}  [configParameters]                  Optional map of configuration keys. If
    *                                                      set each key is searched for in the built
    *                                                      HTML and replaced with the corresponding
@@ -394,6 +397,28 @@ module.exports = {
         }
       );
     });
+
+    /**
+     * Start a simple http serve which serves the contents of paths.build.
+     */
+    gulp.task('serve', ['build'], function(cb) {
+      var server = express();
+      var port = options.port || gutil.env.port || 4040;
+      server.use(express.static(paths.build));
+      server.listen(port, function() {
+        gutil.log(
+          gutil.colors.yellow('Server listening at ') +
+          gutil.colors.cyan('http://localhost:' + port)
+        );
+        cb();
+      });
+    });
+
+    /**
+     * Alias for watch and serve, start a server with a watcher for dyanmic changes as well.
+     */
+    gulp.task('wserve', ['watch', 'serve']);
+    gulp.task('watch-and-serve', ['wserve']);
 
     /**
      * Default task. Gets executed when gulp is called without arguments.
