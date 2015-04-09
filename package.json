@@ -1,6 +1,6 @@
 {
   "name": "syrup",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
