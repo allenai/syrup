@@ -330,7 +330,13 @@ a[href].btn-transparent,
   border-bottom: none;
   text-shadow: none;
 
-  &:active {
+  &:hover {
+    background: transparent;
+  }
+
+  &:active,
+  &:focus {
+    background: transparent;
     color: #fff;
   }
 }
