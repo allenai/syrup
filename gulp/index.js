@@ -258,7 +258,7 @@ module.exports = {
         .pipe(less({ compress: options.compressCss !== false }))
         .pipe(cb(paths.build + '/css'))
         .pipe(autoprefixer('last 2 versions'))
-        .pipe(gulp.dest(paths.build + '/css'));
+        .pipe(gulp.dest(paths.build));
     });
 
     /**
