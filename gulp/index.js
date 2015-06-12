@@ -162,19 +162,6 @@ module.exports = {
       throw 'Invalid paths';
     }
 
-    // Support the --builddir or --target options as an override for the build directory.
-    // TODO: Document this.  Should also provide the ability to pass all options and/or paths
-    // via command flags, ie. gulp --paths.build=../public build
-    if (gutil.env.builddir || gutil.env.target) {
-      paths.build = gutil.env.builddir || gutil.env.target;
-    }
-
-    // Finally, if NODE_BUILD_DIR is set, override paths.build
-    // TODO: Document!
-    if (process.env.NODE_BUILD_DIR) {
-      paths.build = process.env.NODE_BUILD_DIR;
-    }
-
     // Helper function to get browserify bundler used both by the 'js' task and the 'watch' task
     var bundlerInstance;
     var bundler = function(watch) {
