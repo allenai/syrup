@@ -55,4 +55,3 @@ class Flapjack extends React.Component {
 }
 
 React.render(<Flapjack />, document.body);
-
