@@ -255,6 +255,7 @@ module.exports = {
       if (!options.disableJsHint) {
         gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jshint)));
         return gulp.src(paths.jshint)
+          .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
           .pipe(react())
           .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
           .pipe(jshint.reporter(stylish));
