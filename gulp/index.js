@@ -342,7 +342,7 @@ module.exports = {
      * dependency.
      */
     gulp.task('html-only', copyHtml);
-    gulp.task('html-js', [ 'js' ], copyHtml);
+    gulp.task('html-js', [ 'jslint', 'js' ], copyHtml);
     gulp.task('html-less', [ 'less' ], copyHtml);
     gulp.task('html-assets', [ 'assets' ], copyHtml);
 
