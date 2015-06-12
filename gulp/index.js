@@ -256,6 +256,7 @@ module.exports = {
       return gulp.src(paths.less)
         .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
         .pipe(less({ compress: options.compressCss !== false }))
+        .pipe(cb(paths.build))
         .pipe(autoprefixer('last 2 versions'))
         .pipe(gulp.dest(paths.build));
     });
