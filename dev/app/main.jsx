@@ -6,7 +6,7 @@ class Flapjack extends React.Component {
   render() {
     return (
       <div className="flapjack">
-        <header><h1>What a tasty flapjack!</h1></header>
+        <header><h1>What a tasty flapjack! React {React.version}</h1></header>
         <main>
           <h2>I know, right!?</h2>
           <p>

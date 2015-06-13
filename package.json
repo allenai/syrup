@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "babelify": "6.0.1",
-    "browserify": "9.0.3",
+    "browserify": "10.2.4",
     "del": "0.1.3",
     "express": "4.10.1",
     "griddle": "0.1.2",
@@ -47,6 +47,6 @@
     "stringify": "3.1.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
-    "watchify": "2.4.0"
+    "watchify": "codeviking/watchify"
   }
 }
