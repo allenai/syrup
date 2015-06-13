@@ -12,6 +12,7 @@
     "express": "4.12.3",
     "gulp-util": "3.0.4",
     "morgan": "1.5.2",
-    "react": "0.13.1"
+    "react": "0.13.3",
+    "segfault-handler": "0.2.4"
   }
 }

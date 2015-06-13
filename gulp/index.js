@@ -25,6 +25,7 @@ var runSequence = require('run-sequence');
 var babelify = require('babelify');
 var react = require('gulp-react');
 var express = require('express');
+var childProcess = require('child_process');
 
 /**
  * @private
@@ -75,6 +76,20 @@ function formattedTimeDiff(start) {
  */
 function outputBuildCompleteMessage(start) {
   gutil.log(gutil.colors.green('Build finished successfully in ') + formattedTimeDiff(start));
+}
+
+/**
+ * @private
+ * Helper which converts stdout to gutil.log output
+ */
+function stdoutToLog(gutil, stdout) {
+  var out = stdout.split('\n');
+  out.forEach(function(o) {
+    var trimmed = o.trim();
+    if (trimmed.length > 0) {
+      gutil.log(o.trim());
+    }
+  });
 }
 
 module.exports = {
@@ -162,9 +177,26 @@ module.exports = {
       throw 'Invalid paths';
     }
 
-    // Helper function to get browserify bundler used both by the 'js' task and the 'watch' task
+    /**
+     * @private
+     * Helper method which rebundles the javascript and prints out timing information upon completion.
+     */
+    var rebundleJs = function() {
+      var start = Date.now();
+      gutil.log(gutil.colors.yellow('Rebundling javascript'));
+      gulp.start('html-js', function() {
+        outputBuildCompleteMessage(start);
+      });
+    };
+
     var bundlerInstance;
-    var bundler = function(watch) {
+    var watchJs = false;
+    /**
+     * @private
+     * Helper method which provides a (potentially) shared browserify + possible watchify instance
+     * for js bundling.
+     */
+    var bundler = function() {
       if (!bundlerInstance) {
         var b = browserify({
           debug: options.sourceMaps !== false,
@@ -174,14 +206,64 @@ module.exports = {
           packageCache: {},
           fullPaths: true /* Required for source maps */
         });
-        if (watch) {
-          bundlerInstance = watchify(b, { delay: 1 });
-          bundlerInstance.on('update', function() {
-            var start = Date.now();
-            gutil.log(gutil.colors.yellow('Javascript change detected'));
-            gulp.start('html-js', function() {
-              outputBuildCompleteMessage(start);
+        if (watchJs) {
+          bundlerInstance = watchify(b, { ignoreWatch: '**/node_modules/**' });
+          bundlerInstance.on('update', function(changedFiles) {
+            // watchify has a bug where it actually emits changes for files in node_modules, even
+            // though by default it's not supposed to.  We protect against that bug by checking if
+            // the changes only involve node_modules and if so we don't do anything
+            var nodeModuleChanges = changedFiles.filter(function(f) {
+              return f.indexOf('/node_modules/') !== -1;
             });
+            if (nodeModuleChanges.length !== changedFiles.length) {
+              // detect if a package.json file was changed and run an npm install if so as to load
+              // the latest dependencies
+              var packageJsonChanges = changedFiles.filter(function(f) {
+                var fileParts = f.split('.');
+                if (fileParts && fileParts.length > 1) {
+                  return (
+                    path.basename(fileParts[fileParts.length - 2]) === 'package' &&
+                    fileParts[fileParts.length - 1] === 'json'
+                  );
+                } else {
+                  return false;
+                }
+              });
+              if (packageJsonChanges.length > 0) {
+                // we have to release the bundler since there's no way to fully invalidate
+                // cache (other than releasing the bundler itself)
+                bundlerInstance.reset();
+                bundlerInstance.close();
+                bundlerInstance = undefined;
+                gutil.log(gutil.colors.yellow('package.json change detected, running npm prune'));
+                childProcess.exec('npm prune', function(err, stdout) {
+                  if (err) {
+                    gutil.log(gutil.colors.red('Error running npm prune:'), err.toString());
+                    rebundleJs();
+                  } else {
+                    if (stdout) {
+                      stdoutToLog(gutil, stdout);
+                    }
+                    gutil.log(gutil.colors.yellow('running npm install'));
+                    childProcess.exec('npm install', { cwd: paths.base }, function(err, stdout) {
+                      if (err) {
+                        gutil.log(gutil.colors.red('Error installing dependencies:'), err.toString());
+                        rebundleJs();
+                      } else {
+                        if (stdout) {
+                          stdoutToLog(gutil, stdout);
+                        }
+                        gutil.log(gutil.colors.yellow('Dependencies installed successfully'));
+                        rebundleJs();
+                      }
+                    });
+                  }
+                });
+              } else {
+                gutil.log(gutil.colors.yellow('Javascript changed detected'));
+                rebundleJs();
+              }
+            }
           });
         } else {
           bundlerInstance = b;
@@ -344,7 +426,8 @@ module.exports = {
      */
     gulp.task('watch', function() {
       options.handleExceptions = true;
-      bundler(true);
+      watchJs = true;
+      bundler();
       gulp.start('build', function() {
         gulp.watch(paths.allLess, function() {
           var start = Date.now();

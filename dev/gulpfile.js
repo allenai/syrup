@@ -5,10 +5,13 @@ var gutil = require('gulp-util');
 var syrup = require('../');
 var express = require('express');
 var morgan = require('morgan');
+var segfaultHandler = require('segfault-handler');
+
+segfaultHandler.registerHandler();
 
 syrup.gulp.init(gulp);
 
-gulp.task('start-server', function(cb) {
+gulp.task('start-server', ['watch'], function(cb) {
   var server = express();
   server.use(morgan('dev'));
   server.use(express.static('./build'));
@@ -17,5 +20,3 @@ gulp.task('start-server', function(cb) {
     cb();
   });
 });
-
-
