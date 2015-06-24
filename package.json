@@ -1,6 +1,6 @@
 {
   "name": "syrup",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
@@ -47,6 +47,6 @@
     "stringify": "3.1.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
-    "watchify": "codeviking/watchify"
+    "watchify": "3.2.3"
   }
 }
