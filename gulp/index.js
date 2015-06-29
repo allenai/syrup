@@ -182,11 +182,8 @@ module.exports = {
      * Helper method which rebundles the javascript and prints out timing information upon completion.
      */
     var rebundleJs = function() {
-      var start = Date.now();
       gutil.log(gutil.colors.yellow('Rebundling javascript'));
-      gulp.start('html-js', function() {
-        outputBuildCompleteMessage(start);
-      });
+      runOrQueue('html-js');
     };
 
     var bundlerInstance;
@@ -422,6 +419,34 @@ module.exports = {
     gulp.task('html', [ 'js', 'less', 'assets'], copyHtml);
 
     /**
+     * Hash of running tasks. The key is task name; value is a boolean - true if the task should be
+     * re-run on completion; false otherwise.
+     */
+    var runningTasks = {};
+
+    /**
+     * Helper function for watch-triggered task calls. This will run the task immediately if there
+     * isn't an instance already running, and will queue the task to run after completion if not.
+     * @param {string} name the name of the task to run.
+     */
+    var runOrQueue = function(name) {
+      if (runningTasks[name] === undefined) {
+        var start = Date.now();
+        runningTasks[name] = false;
+        gulp.start(name, function() {
+          outputBuildCompleteMessage(start);
+          var shouldRunAgain = runningTasks[name];
+          delete runningTasks[name];
+          if (shouldRunAgain) {
+            runOrQueue(name);
+          }
+        });
+      } else {
+        runningTasks[name] = true;
+      }
+    };
+
+    /**
      * Watches specific files and rebuilds only the changed component(s).
      */
     gulp.task('watch', function() {
@@ -430,27 +455,18 @@ module.exports = {
       bundler();
       gulp.start('build', function() {
         gulp.watch(paths.allLess, function() {
-          var start = Date.now();
           gutil.log(gutil.colors.yellow('Less change detected'));
-          gulp.start('html-less', function() {
-            outputBuildCompleteMessage(start);
-          });
+          runOrQueue('html-less');
         });
 
         gulp.watch(paths.assets, function() {
-          var start = Date.now();
           gutil.log(gutil.colors.yellow('Asset change detected'));
-          gulp.start('html-assets', function() {
-            outputBuildCompleteMessage(start);
-          });
+          runOrQueue('html-assets');
         });
 
         gulp.watch(paths.html, function() {
-          var start = Date.now();
           gutil.log(gutil.colors.yellow('HTML change detected'));
-          gulp.start('html-only', function() {
-            outputBuildCompleteMessage(start);
-          });
+          runOrQueue('html-only');
         });
       });
     });
