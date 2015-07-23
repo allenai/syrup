@@ -24,7 +24,7 @@ describe('syrup.gulp.init()', function() {
     );
   };
 
-  //Remove any built files after each test is executed
+  // Remove any build artifacts after each test is executed
   afterEach(function(done) {
     var OUT = [ PROJECT_BUILD_DIR, ANOTHER_PROJECT_BUILD_DIR ];
     del(OUT, function() {

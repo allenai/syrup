@@ -14,12 +14,13 @@
     "gulp",
     "less"
   ],
-  "license": "GPL v2",
+  "license": "GPL-2.0",
   "scripts": {
     "test": "mocha tests/*-test.js"
   },
   "devDependencies": {
     "gulp": "3.8.9",
+    "gulp-gh-pages": "^0.5.2",
     "less": "1.7.5",
     "mocha": "2.0.1"
   },

@@ -1,8 +1,0 @@
-#!/usr/local/bin/node
-/**
- * Runs a simple dev server on localhost:4000 for previewing LESS styles.
- */
-var express = require('express');
-var app = express();
-app.use(express.static(__dirname));
-app.listen(4040, function() { console.log('Listening at http://localhost:4040'); });

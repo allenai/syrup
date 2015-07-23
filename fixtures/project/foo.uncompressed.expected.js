@@ -13,7 +13,8 @@ var b = require('./bar');
 if (b) var a = 'foobar';
 
 module.exports = {
-  foo: b.bar };
+  foo: b.bar
+};
 
 },{"./bar":"/Users/skone/Projects/syrup/fixtures/project/src/bar.js"}]},{},["/Users/skone/Projects/syrup/fixtures/project/src/foo.jsx"])
 

@@ -1,18 +1,106 @@
 # Syrup
 
-Syrup is a collection of shared UI utilities and libraries leveraged by [AI2](http://github.com/allenai) when developing interfaces.
+A collection of shared UI utilities and libraries leveraged by [AI2](http://github.com/allenai) when developing interfaces.
+
+Specifically, syrup provides:
+
+* A series of [gulp](http://gulpjs.com) tasks for building a single-page client-side application.
+* A collection of [less](http://lesscss.org) styles.  To see them in action, visit the [demo](http://allenai.github.io/syrup).
 
 ## Installation
 
-Install via `npm`:
+Install via [npm](http://npmjs.org):
 
 ```shell
 npm install syrup
 ```
 
-## API
+## Gulp
 
-### syrup.gulp.init(gulp, [options, configParameters, paths])
+Syrup includes a series of gulp tasks useful for building a single-page client-side application.
+
+The [gulp tasks](#gulp-tasks) provided by syrup can be initialized like so in your `gulpfile.js`:
+
+```javascript
+// gulpfile.js
+var gulp = require('gulp');
+var syrup = require('syrup');
+
+syrup.gulp.init(gulp);
+```
+
+A build can then be triggered from the terminal:
+
+```
+gulp build
+```
+
+Watch your project for changes dynamically and start a static HTTP server for previewing the result:
+
+```
+gulp watch-and-serve
+```
+
+Read about all of the available [gulp tasks](#gulp-tasks), the default [project structure](#project-structure) or the full API offered by the [`syrup.gulp.init()`](#gulp-init).
+
+## <a name="less"></a> LESS
+
+To include the all of the less styles provide by syrup, simply add the following line to your less stylesheet:
+
+```css
+@import '../../node_modules/syrup/less/syrup.less';
+```
+
+## <a name="gulp-tasks"></a> Gulp Tasks
+
+Syrup provides the following tasks:
+
+- `clean`
+ * Removes all build artifacts
+* `less`
+ * Compiles and minifies LESS files to CSS files.
+* `jslint`
+ * Lints JS files using [jslint](https://www.npmjs.com/package/jslint).
+* `js`
+ * Bundles, minifies and obfuscates `js` files using [browserify](http://browserify.org) into a single, bundled script.  Uses [babel](https://babeljs.io/) to provide support for ECMA6 features and [ReactJS](http://reactjs.com).
+* `assets`
+ * Copies all assets into the build directory.
+* `html`
+ * Copies the `index.html` file into the build directory after running the `js`, `assets`, and `less` tasks.
+* `build`
+ * Builds the project by running the `assets`, `jslint`, `js`, `less`, and `html` tasks.
+* `watch`
+ * Watches the project for changes and rebuilds the affected components as they occur.
+* `serve`
+ * Runs an [express](http://expressjs.com) HTTP serving serving the application.
+* `watch-and-serve`
+ * Runs the `watch` and `serve` tasks.
+
+## <a name="project-structure"></a> Default Project Structure
+
+The following project structure is expected by default, but can be changed via the `paths` parameter
+of [`syrup.gulp.init()`](#gulp-init):
+
+```javascript
+{
+  // the location of your application's index.html file
+  html: 'app/index.html',
+  // the less files which will be watched for changes
+  allLess: 'app/**/*.less',
+  // the less entry-point
+  less: 'app/main.less',
+  // all js files to be linted using jshint
+  jshint: 'app/**/*.js',
+  // the js entry-point
+  js: 'app/app.js',
+  // static assets (images, fonts, etc)
+  assets: 'app/assets/**/*',
+  // the location of build output
+  build: 'build'
+}
+```
+
+## <a name="gulp-init"></a> Gulp API
 
 ```javascript
 /**
@@ -80,87 +168,4 @@ npm install syrup
  * @returns {undefined}
  */
 syrup.gulp.init(gulp, options, configParameters, paths)
-```
-
-The default paths are as follows.
-
-```javascript
-{
-  base: process.cwd(),
-  html: 'app/index.html',
-  allLess: 'app/**/*.less',
-  less: 'app/main.less',
-  jshint: 'app/**/*.js',
-  js: 'app/app.js',
-  assets: 'app/assets/**/*',
-  build: 'build'
-}
-```
-
-Example:
-
-```javascript
-var gulp = require('gulp');
-var syrup = require('syrup');
-
-syrup.gulp.init(gulp);
-```
-
-Now, from the command line run:
-
-```
-gulp build
-```
-
-## Default Styles
-
-Example Use:
-
-```css
-@import '../../node_modules/syrup/less/syrup.less';
-```
-
-Included Stylesheets:
-
-* `syrup/less/syrup.less`: A collection of less styles which include:
-  * `syrup/less/colors.less`: Common colors.
-  * `syrup/less/defaults.less`: Opinionated defaults.
-  * `syrup/less/dimensions.less`: Variables related to standard site dimensions.
-  * `syrup/less/functions.less`: Utility functions.
-  * `syrup/less/icons.less`: Webfont icons.
-  * `syrup/less/reset.less`: Browser style normalization.
-  * `syrup/less/responsive.less`: Basic responsiveness for specified containers.
-  * `syrup/less/text.less`: Typographic styles.
-
-Colors:
-
-The following colors are available upon including `colors.less`:
-
-```less
-/* ==========================================================================
-   AI2 Brand Colors
-   ========================================================================== */
-
-@black: #202122;
-@dark-blue: #286a8e;
-@blue: #5ea5d9;
-@gold: #fcb431;
-@yellow: #fdea65;
-@off-black: #3e4346;
-@gray: #8c9296;
-@light-blue: #bed2dd;
-@light-gray: #e0e0e0;
-@white: #fff;
-
-@lighter-gray: lighten(@light-gray, 8%);
-@lighter-blue: lighten(@light-blue, 12%);
-
-@red: #a92020;
-@green: #3fb62c;
-@purple: #81288e;
-@orange: #e26622;
-
-@shadow: rgba(45,45,46,0.1);
-@dark-shadow: rgba(45,45,46,0.2);
-@translucent: rgba(255,255,255,.95);
 ```

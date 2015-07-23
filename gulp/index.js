@@ -458,12 +458,10 @@ module.exports = {
           gutil.log(gutil.colors.yellow('Less change detected'));
           runOrQueue('html-less');
         });
-
         gulp.watch(paths.assets, function() {
           gutil.log(gutil.colors.yellow('Asset change detected'));
           runOrQueue('html-assets');
         });
-
         gulp.watch(paths.html, function() {
           gutil.log(gutil.colors.yellow('HTML change detected'));
           runOrQueue('html-only');
