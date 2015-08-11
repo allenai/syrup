@@ -254,6 +254,7 @@ footer {
    ========================================================================== */
 
 input[type="text"],
+input[type="number"],
 input[type="search"],
 input[type="password"],
 input[type="submit"],
@@ -263,12 +264,21 @@ textarea {
 }
 
 input[type="text"],
+input[type="number"],
 input[type="search"],
 input[type="password"],
 textarea {
   border: 1px solid @light-gray;
   box-shadow: inset 1px 1px 4px 0 @light-gray;
   width: 100%;
+  &.has-error {
+    border-color: @light-red;
+    box-shadow: inset 1px 1px 4px 0 @light-red;
+  }
+}
+
+input:focus.has-error {
+  outline: auto 5px @light-red;
 }
 
 input[type="checkbox"],
