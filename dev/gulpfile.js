@@ -5,9 +5,6 @@ var gutil = require('gulp-util');
 var syrup = require('../');
 var express = require('express');
 var morgan = require('morgan');
-var segfaultHandler = require('segfault-handler');
-
-segfaultHandler.registerHandler();
 
 syrup.gulp.init(gulp);
 
