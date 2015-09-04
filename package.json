@@ -14,7 +14,7 @@
     "gulp",
     "less"
   ],
-  "license": "GPL-2.0",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "mocha tests/*-test.js"
   },
