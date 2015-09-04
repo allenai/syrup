@@ -1,8 +1,11 @@
 {
-  "name": "Flapjack",
+  "name": "syrup-test",
   "version": "1.0.0",
   "description": "A simple test application for syrup.",
   "main": "gulpfile.js",
+  "homepage": "http://allenai.github.io/syrup/",
+  "repository": "allenai/syrup",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "gulp build",
@@ -12,7 +15,6 @@
     "express": "4.12.3",
     "gulp-util": "3.0.4",
     "morgan": "1.5.2",
-    "react": "0.13.3",
-    "segfault-handler": "0.2.4"
+    "react": "0.13.3"
   }
 }
