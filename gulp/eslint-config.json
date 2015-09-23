@@ -5,7 +5,7 @@
     "react"
   ],
   "rules": {
-    "strict": 2,
+    "strict": 1,
     "jsx-quotes": 2,
     "no-console": 1,
     "curly": 2,

@@ -132,6 +132,9 @@ module.exports = {
    *                                                      included via require.
    * @param {number}  [options.port=4000]                 Optional port for the HTTP server started
    *                                                      via the serve task.  Defaults to 4000.
+   * @param {objectd} [options.eslintOptions]             Eslint configuration overrides.  See
+   *                                                      https://github.com/adametry/gulp-eslint for
+   *                                                      a full list of options.
    * @param {object}  [configParameters]                  Optional map of configuration keys. If
    *                                                      set each key is searched for in the built
    *                                                      HTML and replaced with the corresponding
@@ -330,11 +333,14 @@ module.exports = {
      * Lints javascript
      */
     gulp.task('jslint', function() {
+      var eslintOptions = merge({
+        configFile: path.resolve(__dirname, 'eslint-config.json')
+      }, options.eslintOptions);
       if (!options.disableJsHint) {
         gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jsLint)));
         return gulp.src(paths.jsLint)
           .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
-          .pipe(eslint())
+          .pipe(eslint(eslintOptions))
           .pipe(eslint.format())
           .pipe(gif(!options.handleExceptions, eslint.failOnError()));
       } else {
