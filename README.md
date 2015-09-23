@@ -89,8 +89,8 @@ of [`syrup.gulp.init()`](#gulp-init):
   allLess: 'app/**/*.less',
   // the less entry-point
   less: 'app/main.less',
-  // all js files to be linted using jshint
-  jshint: 'app/**/*.js',
+  // all js files to be linted using eslint
+  jsLint: 'app/**/*.js',
   // the js entry-point
   js: 'app/app.js',
   // static assets (images, fonts, etc)
@@ -126,7 +126,7 @@ of [`syrup.gulp.init()`](#gulp-init):
  *                                                      detectGlobals.  Causes an extra ~1000
  *                                                      lines to be added to the bundled
  *                                                      javascript.  Defaults to false.
- * @param {boolean} [options.disableJsHint=false]       Disables jshint.  Defaults to false.
+ * @param {boolean} [options.disableJsLint=false]       Disables javascript linter. Defaults to false.
  * @param {boolean} [options.handleExceptions=false]    If an exception is encountered while
  *                                                      compiling less or bundling javascript,
  *                                                      capture the associated error and output
@@ -155,8 +155,8 @@ of [`syrup.gulp.init()`](#gulp-init):
  *                                                      the gulpfile lives.  Defaults to the
  *                                                      current processes working directory.
  * @param {string}  paths.html                          Path to the project's HTML files.
- * @param {string}  paths.jshint                        Path to the javascript files which should
- *                                                      be linted using jshint.
+ * @param {string}  paths.jsLint                        Path to the javascript files which should
+ *                                                      be linted using eslint.
  * @param {string}  paths.js                            Javascript entry point.
  * @param {string}  paths.allLess                       Path matching all less files which should
  *                                                      be watched for changes.

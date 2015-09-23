@@ -6,7 +6,7 @@
    html: 'app/index.html',
    allLess: 'app/**/*.less',
    less: 'app/main.less',
-   jshint: ['app/**/*.js', 'app/**/*.jsx'],
+   jsLint: ['app/**/*.js', 'app/**/*.jsx'],
    js: 'app/main.jsx',
    assets: 'app/assets/**/*',
    build: 'build/'
