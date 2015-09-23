@@ -204,22 +204,6 @@ describe('syrup.gulp.init()', function() {
     });
   });
 
-  it('lints javascript', function(done) {
-    initDefaultProject();
-    // Capture the output
-    var captured = [];
-    var orig = console.log;
-    console.log = function() {
-      captured.push(Array.prototype.slice.apply(arguments));
-    };
-    gulp.start('jslint', function() {
-      // Revert the capture
-      console.log = orig;
-      assert(captured.join('').indexOf('2 warnings') !== -1);
-      done();
-    })
-  });
-
   it('has a default task which runs the build task', function() {
     assert(typeof gulp.tasks['default'] === 'object');
     assert.deepEqual(

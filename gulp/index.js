@@ -8,7 +8,6 @@ var less = require('gulp-less');
 var del = require('del');
 var gutil = require('gulp-util');
 var gif = require('gulp-if');
-var jshint = require('gulp-jshint');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -23,9 +22,9 @@ var plumber = require('gulp-plumber');
 var defaultPaths = require('./default-paths');
 var runSequence = require('run-sequence');
 var babelify = require('babelify');
-var react = require('gulp-react');
 var express = require('express');
 var childProcess = require('child_process');
+var eslint = require('gulp-eslint');
 
 /**
  * @private
@@ -145,8 +144,8 @@ module.exports = {
    *                                                      the gulpfile lives.  Defaults to the
    *                                                      current processes working directory.
    * @param {string}  paths.html                          Path to the project's HTML files.
-   * @param {string}  paths.jshint                        Path to the javascript files which should
-   *                                                      be linted using jshint.
+   * @param {string}  paths.jsLint                        Path to the javascript files which should
+   *                                                      be linted using eslint.
    * @param {string}  paths.js                            Javascript entry point.
    * @param {string}  paths.allLess                       Path matching all less files which should
    *                                                      be watched for changes.
@@ -332,12 +331,12 @@ module.exports = {
      */
     gulp.task('jslint', function() {
       if (!options.disableJsHint) {
-        gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jshint)));
-        return gulp.src(paths.jshint)
+        gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jsLint)));
+        return gulp.src(paths.jsLint)
           .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
-          .pipe(react())
-          .pipe(jshint(path.resolve(__dirname, '../.jshintrc')))
-          .pipe(jshint.reporter(stylish));
+          .pipe(eslint())
+          .pipe(eslint.format())
+          .pipe(gif(!options.handleExceptions, eslint.failOnError()));
       } else {
         gutil.log(
           gutil.colors.gray(
