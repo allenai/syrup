@@ -115,7 +115,7 @@ module.exports = {
    *                                                      detectGlobals.  Causes an extra ~1000
    *                                                      lines to be added to the bundled
    *                                                      javascript.  Defaults to false.
-   * @param {boolean} [options.disableJsHint=false]       Disables jshint.  Defaults to false.
+   * @param {boolean} [options.disableJsLint=false]       Disables linting of javascript.  Defaults to false.
    * @param {boolean} [options.handleExceptions=false]    If an exception is encountered while
    *                                                      compiling less or bundling javascript,
    *                                                      capture the associated error and output
@@ -336,7 +336,7 @@ module.exports = {
       var eslintOptions = merge({
         configFile: path.resolve(__dirname, 'eslint-config.json')
       }, options.eslintOptions);
-      if (!options.disableJsHint) {
+      if (!options.disableJsLint) {
         gutil.log(util.format('Linting javascript: %s', gutil.colors.magenta(paths.jsLint)));
         return gulp.src(paths.jsLint)
           .pipe(gif(options.handleExceptions, plumber(logErrorAndKillStream)))
