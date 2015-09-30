@@ -60,7 +60,7 @@ Syrup provides the following tasks:
 * `less`
  * Compiles and minifies LESS files to CSS files.
 * `jslint`
- * Lints JS files using [jslint](https://www.npmjs.com/package/jslint).
+ * Lints JS files using [jshint](https://www.npmjs.com/package/gulp-jshint).
 * `js`
  * Bundles, minifies and obfuscates `js` files using [browserify](http://browserify.org) into a single, bundled script.  Uses [babel](https://babeljs.io/) to provide support for ECMA6 features and [ReactJS](http://reactjs.com).
 * `assets`
