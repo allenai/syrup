@@ -2,7 +2,10 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var syrup = require('../');
+// this requires you have syrup available globally. Dev workflow is to generate a link
+// locally to syrup and then dev on this dev project. To create the syrup link:
+// $ cd path/to/syrup && npm link
+var syrup = require('syrup');
 var express = require('express');
 var morgan = require('morgan');
 
