@@ -1,6 +1,6 @@
 {
   "name": "syrup",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A collection of common UI utilities and libraries leveraged by AI2.",
   "homepage": "http://allenai.github.io/syrup/",
   "repository": "allenai/syrup",
@@ -18,35 +18,41 @@
   "scripts": {
     "test": "mocha tests/*-test.js"
   },
+  "bin": {
+    "mocha": "./node_modules/.bin/_mocha"
+  },
   "devDependencies": {
-    "gulp": "3.8.9",
+    "gulp": "3.9.0",
     "gulp-gh-pages": "^0.5.2",
-    "less": "1.7.5",
-    "mocha": "2.0.1"
+    "less": "2.5.3"
   },
   "dependencies": {
-    "babel-eslint": "4.1.3",
-    "babelify": "6.3.0",
-    "browserify": "11.0.1",
-    "del": "0.1.3",
-    "eslint-plugin-react": "3.4.2",
-    "express": "4.10.1",
-    "gulp-autoprefixer": "1.0.1",
+    "babel-eslint": "4.1.6",
+    "babel-preset-es2015": "6.3.13",
+    "babel-preset-react": "6.3.13",
+    "babel-register": "6.3.13",
+    "babelify": "7.2.0",
+    "browserify": "12.0.1",
+    "del": "2.2.0",
+    "eslint-plugin-react": "3.11.3",
+    "express": "4.13.3",
+    "gulp-autoprefixer": "3.1.0",
     "gulp-cache-breaker": "0.0.3",
-    "gulp-eslint": "1.0.0",
-    "gulp-if": "1.2.5",
-    "gulp-less": "1.3.6",
-    "gulp-plumber": "1.0.0",
-    "gulp-react": "3.0.1",
-    "gulp-replace": "0.5.3",
-    "gulp-sourcemaps": "1.5.1",
-    "gulp-uglify": "1.1.0",
-    "gulp-util": "3.0.1",
-    "jshint-stylish": "1.0.0",
-    "run-sequence": "1.0.2",
-    "stringify": "3.1.0",
+    "gulp-eslint": "1.1.1",
+    "gulp-if": "2.0.0",
+    "gulp-less": "3.0.5",
+    "gulp-plumber": "1.0.1",
+    "gulp-react": "3.1.0",
+    "gulp-replace": "0.5.4",
+    "gulp-sourcemaps": "1.6.0",
+    "gulp-uglify": "1.5.1",
+    "gulp-util": "3.0.7",
+    "jshint-stylish": "2.1.0",
+    "mocha": "2.3.4",
+    "run-sequence": "1.1.5",
+    "stringify": "3.2.0",
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
-    "watchify": "3.4.0"
+    "watchify": "3.6.1"
   }
 }

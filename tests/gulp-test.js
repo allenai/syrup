@@ -27,9 +27,7 @@ describe('syrup.gulp.init()', function() {
   // Remove any build artifacts after each test is executed
   afterEach(function(done) {
     var OUT = [ PROJECT_BUILD_DIR, ANOTHER_PROJECT_BUILD_DIR ];
-    del(OUT, function() {
-      done();
-    });
+    del(OUT).then((deleted) => done());
   });
 
   it('throws an exception without gulp', function() {
@@ -99,7 +97,7 @@ describe('syrup.gulp.init()', function() {
       assert(
         fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html'))
           .toString()
-          .indexOf('foo.js?cb=33e954aae8dcf7853cac302409b6d597c9777aa6') !== -1
+          .indexOf('foo.js?cb=cbec4142f3baca1aac463e015c463c9de809116b') !== -1
       );
       done();
     });
@@ -110,9 +108,9 @@ describe('syrup.gulp.init()', function() {
     gulp.start('less', function() {
       assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.css')));
       assert.equal(
-          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.css')).toString(),
-          fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.expected.css')).toString()
-        );
+        fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.css')).toString().trim(),
+        fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.expected.css')).toString().trim()
+      );
       done();
     });
   });
@@ -125,8 +123,10 @@ describe('syrup.gulp.init()', function() {
       require(path.resolve(PROJECT_ROOT, 'paths.js'))
     );
     gulp.start('less', function() {
-      fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.css')).toString(),
-      fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.uncompressed.expected.css')).toString()
+      assert.equal(
+        fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.css')).toString(),
+        fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.uncompressed.expected.css')).toString()
+      );
       done();
     });
   });
@@ -136,9 +136,10 @@ describe('syrup.gulp.init()', function() {
     gulp.start('js', function() {
       assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')));
       assert.equal(
-          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')).toString(),
-          fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.expected.js')).toString()
-        );
+        fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')).toString(),
+        fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.expected.js')).toString()
+          .replace(/\$ROOT/g, PROJECT_ROOT)
+      );
       done();
     });
   });
@@ -165,9 +166,10 @@ describe('syrup.gulp.init()', function() {
     gulp.start('js', function() {
       assert(fs.existsSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')));
       assert.equal(
-          fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')).toString(),
-          fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.uncompressed.expected.js')).toString()
-        );
+        fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.js')).toString(),
+        fs.readFileSync(path.resolve(PROJECT_ROOT, 'foo.uncompressed.expected.js')).toString()
+          .replace(/\$ROOT/g, PROJECT_ROOT)
+      );
       done();
     })
   });
