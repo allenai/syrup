@@ -7,7 +7,7 @@ var assert = require('assert');
 var del = require('del');
 var syrup = require('../');
 
-describe('syrup.gulp.init()', function() {
+describe('syrup.gulp', function() {
 
   var PROJECT_ROOT = path.resolve(__dirname, '../fixtures/project');
   var PROJECT_BUILD_DIR = path.resolve(PROJECT_ROOT, 'build');
@@ -27,7 +27,7 @@ describe('syrup.gulp.init()', function() {
   // Remove any build artifacts after each test is executed
   afterEach(function(done) {
     var OUT = [ PROJECT_BUILD_DIR, ANOTHER_PROJECT_BUILD_DIR ];
-    del(OUT).then((deleted) => done());
+    del(OUT).then(function(deletedPaths) { done() });
   });
 
   it('throws an exception without gulp', function() {
@@ -97,7 +97,7 @@ describe('syrup.gulp.init()', function() {
       assert(
         fs.readFileSync(path.resolve(PROJECT_BUILD_DIR, 'foo.html'))
           .toString()
-          .indexOf('foo.js?cb=cbec4142f3baca1aac463e015c463c9de809116b') !== -1
+          .indexOf('foo.js?cb=e03b814bd435b2f8e4ae18d4cc82d840a4221aab') !== -1
       );
       done();
     });
