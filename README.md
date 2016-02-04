@@ -7,6 +7,10 @@ Specifically, syrup provides:
 * A series of [gulp](http://gulpjs.com) tasks for building a single-page client-side application.
 * A collection of [less](http://lesscss.org) styles.  To see them in action, visit the [demo](http://allenai.github.io/syrup).
 
+## Requirements
+
+* [nodejs](http://nodejs.org) >= 0.12.7 is required.
+
 ## Installation
 
 Install via [npm](http://npmjs.org):

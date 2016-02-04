@@ -307,7 +307,7 @@ module.exports = {
     gulp.task('clean', function(cb) {
       gutil.log(util.format('Cleaning: %s', gutil.colors.magenta(paths.build)));
       var targets = [ paths.build ];
-      del(targets, { force: true }).then(cb);
+      return del(targets, { force: true });
     });
 
     /**
