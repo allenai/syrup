@@ -305,9 +305,9 @@ module.exports = {
      * Removes all build artifacts.
      */
     gulp.task('clean', function(cb) {
-      gutil.log(util.format('Cleaning: %s', gutil.colors.magenta(paths.build)));
-      var targets = [ paths.build ];
-      return del(targets, { force: true });
+      var target = paths.build + '/**/*';
+      gutil.log(util.format('Cleaning: %s', gutil.colors.magenta(target)));
+      return del([target], { force: true });
     });
 
     /**
